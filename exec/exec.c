@@ -6,16 +6,19 @@ int	open_file(t_node *redirect)
 {
 	int	fd;
 
-	printf("redirect->kind : %d\n", redirect->kind);
 	if (redirect->kind == ND_REDIRECT_OUT)
 	{
+		printf("=======\n");
 		fd = open(redirect->filename,
 				O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	}
 	else if (redirect->kind == ND_REDIRECT_IN)
 		fd = open(redirect->filename, O_RDONLY);
 	else if (redirect->kind == ND_REDIRECT_APPEND)
+	{
+		printf("----\n");
 		fd = open(redirect->filename, O_CREAT | O_WRONLY | O_APPEND, 0644);
+	}
 	if (fd < 0)
 		fatal_error("open");
 	return (fd);

@@ -42,7 +42,10 @@ void	handle_metachar_syntax_error(char	*word)
 
 int	filter_redirect(char *word)
 {
-	if (strcmp(word, ">") == 0)
+
+	if (strncmp(word, ">>", 2) == 0)
+		return (STDOUT_FILENO);
+	else if (strcmp(word, ">") == 0)
 		return (STDOUT_FILENO);
 	else if (strcmp(word, "<") == 0)
 		return (STDIN_FILENO);
@@ -129,7 +132,6 @@ t_node	*get_node(t_token *token)
 		return (NULL);
 	while (token)
 	{
-		printf("token->word : %s\n", token->word);
 		if (token->kind == TK_EOF)
 			break ;
 		else if (token->kind == TK_WORD)

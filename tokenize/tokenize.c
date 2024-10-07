@@ -8,7 +8,7 @@ void	fatal_error(char *msg)
 
 char	*filter_operator(char *input, char **rest)
 {
-	char	*op[] = {"||", "&&", "(", ")", ";;", ";&", "&", ";", "|&", "\n"};
+	char	*op[] = {"||", "&&", "(", ")", ";;", ";&", "&", ";", "|&", "\n", ">>", "<<"};
 	int		i;
 	int		length;
 	char	*str;

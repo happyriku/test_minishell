@@ -2,41 +2,6 @@
 
 extern char **environ;
 
-int	open_file(t_node *redirect)
-{
-	int	fd;
-
-	if (redirect->kind == ND_REDIRECT_OUT)
-	{
-		printf("=======\n");
-		fd = open(redirect->filename,
-				O_CREAT | O_WRONLY | O_TRUNC, 0644);
-	}
-	else if (redirect->kind == ND_REDIRECT_IN)
-		fd = open(redirect->filename, O_RDONLY);
-	else if (redirect->kind == ND_REDIRECT_APPEND)
-	{
-		printf("----\n");
-		fd = open(redirect->filename, O_CREAT | O_WRONLY | O_APPEND, 0644);
-	}
-	if (fd < 0)
-		fatal_error("open");
-	return (fd);
-}
-
-void	do_redirect(t_node *redirect)
-{
-	int	fd;
-
-	if (!redirect)
-		return ;
-	redirect->file_fd = open_file(redirect);
-	if (dup2(redirect->file_fd, redirect->std_fd) == -1)
-		fatal_error("dup2");
-	close(fd);
-	do_redirect(redirect->next);
-}
-
 char	*search_path(char *input)
 {
 	char	*value;
@@ -103,12 +68,14 @@ int	exec(t_node *node)
 		printf("exit\n");
 		return (free(argv), -1);
 	}
+	if (node->redirect != NULL && node->redirect->kind == ND_HEREDOC)
+		do_heredoc(node->redirect);
 	pid = fork();
 	if (pid < 0)
 		return (free(argv), -1);
 	else if (pid == 0)
 	{
-		if (node->redirect != NULL)
+		if (node->redirect != NULL && node->redirect->kind != ND_HEREDOC)
 			do_redirect(node->redirect);
 		path = search_path(argv[0]);
 		if (!path)

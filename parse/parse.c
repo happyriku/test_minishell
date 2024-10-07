@@ -45,6 +45,8 @@ int	filter_redirect(char *word)
 
 	if (strncmp(word, ">>", 2) == 0)
 		return (STDOUT_FILENO);
+	else if (strncmp(word, "<<", 2) == 0)
+		return (STDIN_FILENO);
 	else if (strcmp(word, ">") == 0)
 		return (STDOUT_FILENO);
 	else if (strcmp(word, "<") == 0)
@@ -138,12 +140,12 @@ t_node	*get_node(t_token *token)
 			append_token(&(node->args), new_token(token->word, TK_WORD));
 		else if (strncmp(token->word, ">>", 2) == 0 && token->next->kind == TK_WORD)
 			append_node(&(node->redirect), new_redirect_node(&token, token->next->word, ND_REDIRECT_APPEND));
+		else if (strncmp(token->word, "<<", 2) == 0 && token->next->kind == TK_WORD)
+			append_node(&(node->redirect), new_redirect_node(&token, token->next->word, ND_HEREDOC));
 		else if (strcmp(token->word, ">") == 0 && token->next->kind == TK_WORD)
 			append_node(&(node->redirect), new_redirect_node(&token, token->next->word, ND_REDIRECT_OUT));
 		else if (strcmp(token->word, "<") == 0 && token->next->kind == TK_WORD)
 			append_node(&(node->redirect), new_redirect_node(&token, token->next->word, ND_REDIRECT_IN));
-		else if (strcmp(token->word, "<<") == 0 && token->next->kind == TK_WORD)
-			append_node(&(node->redirect), new_redirect_node(&token, token->next->word, ND_HEREDOC));
 		token = token->next;
 	}
 	append_token(&(node->args), new_token(NULL, TK_EOF));

@@ -10,7 +10,7 @@ SRCS = main.c \
 		parse/parse.c \
 		exec/exec.c \
 		exec/exec_echo.c \
-		redirect/redirect.c \
+		exec/exec_redirect.c \
 
 OBJS = $(SRCS:.c=.o)
 

@@ -95,10 +95,10 @@ size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
 t_node	*parse(t_token *token);
 
 //exec
-int	exec(t_node *node);
-int	exec_echo(char **argv, t_node *node);
-//redirect
-//int	redirect(t_node *node);
+int		exec(t_node *node);
+int		exec_echo(char **argv, t_node *node);
+void	do_redirect(t_node *redirect);
+void	do_heredoc(t_node *redirect);
 
 //error
 void	fatal_error(char *msg);

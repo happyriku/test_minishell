@@ -29,15 +29,30 @@ void	do_redirect(t_node *redirect)
 	do_redirect(redirect->next);
 }
 
-void	do_heredoc(t_node *redirect)
+int	do_heredoc(t_node *redirect, char *kind)
 {
 	char	*line;
+	int		pipefd[2];
+	char	buf;
 
 	while (1)
 	{
 		line = readline(">");
 		if (!line)
 			break ;
-		break ;
+		if (strcmp(kind, CHILD) == 0 && strcmp(line, redirect->delimiter) == 0)
+		{
+			close(redirect->pipefd[1]);
+			while (read(redirect->pipefd[0], &buf, 1) > 0)
+				write(STDOUT_FILENO, &buf, 1);
+			close(redirect->pipefd[0]);
+			exit(0);
+		}
+		close(redirect->pipefd[0]);
+		while (*line)
+			write(redirect->pipefd[1], line++, 1);
 	}
+	close(pipefd[0]);
+	close(pipefd[1]);
+	return (0);
 }

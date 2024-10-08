@@ -69,14 +69,19 @@ int	exec(t_node *node)
 		return (free(argv), -1);
 	}
 	if (node->redirect != NULL && node->redirect->kind == ND_HEREDOC)
-		do_heredoc(node->redirect);
+		return (do_heredoc(node->redirect));
 	pid = fork();
 	if (pid < 0)
 		return (free(argv), -1);
 	else if (pid == 0)
 	{
-		if (node->redirect != NULL && node->redirect->kind != ND_HEREDOC)
-			do_redirect(node->redirect);
+		if (node->redirect != NULL)
+		{
+			if (node->kind == ND_HEREDOC)
+				do_heredoc(node->redirect);
+			else
+				do_redirect(node->redirect, CHILD);
+		}
 		path = search_path(argv[0]);
 		if (!path)
 		{	
@@ -95,6 +100,8 @@ int	exec(t_node *node)
 	}
 	else
 	{
+		if (node->redirect != NULL && node->redirect->kind == ND_HEREDOC)
+			return (do_heredoc(node->redirect, PARENT));
 		wait(&status);
 		free(argv);
 		return (!WIFEXITED(status));

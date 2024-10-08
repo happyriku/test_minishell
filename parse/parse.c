@@ -68,6 +68,22 @@ t_node	*new_redirect_node(t_token **rest, char *word, t_node_kind kind)
 	return (redirect);
 }
 
+t_node	*new_heredoc_node(t_token **rest, char *word, t_node_kind kind)
+{
+	t_node	*redirect;
+
+	redirect = malloc(sizeof(t_node));
+	if (!redirect)
+		return (NULL);
+	redirect->delimiter = word;
+	redirect->next = NULL;
+	redirect->kind = kind;
+	if (pipe(redirect->pipefd) == -1)
+		perror("pipe");
+	*rest = (*rest)->next;
+	return (redirect);
+}
+
 bool	has_redirect(t_token *token)
 {
 	if (strcmp(token->word, ">") == 0 || strcmp(token->word, "<") == 0
@@ -141,7 +157,7 @@ t_node	*get_node(t_token *token)
 		else if (strncmp(token->word, ">>", 2) == 0 && token->next->kind == TK_WORD)
 			append_node(&(node->redirect), new_redirect_node(&token, token->next->word, ND_REDIRECT_APPEND));
 		else if (strncmp(token->word, "<<", 2) == 0 && token->next->kind == TK_WORD)
-			append_node(&(node->redirect), new_redirect_node(&token, token->next->word, ND_HEREDOC));
+			append_node(&(node->redirect), new_heredoc_node(&token, token->next->word, ND_HEREDOC));
 		else if (strcmp(token->word, ">") == 0 && token->next->kind == TK_WORD)
 			append_node(&(node->redirect), new_redirect_node(&token, token->next->word, ND_REDIRECT_OUT));
 		else if (strcmp(token->word, "<") == 0 && token->next->kind == TK_WORD)

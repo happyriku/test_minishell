@@ -12,6 +12,9 @@
 # define SINGLEQUOTE 39
 # define DOUBLEQUOTE 34
 
+# define CHILD	"child"
+# define PARENT "parent"
+
 # include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>
@@ -59,8 +62,11 @@ typedef struct s_node
 	struct s_node	*redirect;
 	char			*word;
 	char			*filename;
+	char			*delimiter;
 	int				std_fd;
 	int				file_fd;
+	//pipe
+	int				pipefd[2];
 }	t_node;
 
 typedef struct s_info
@@ -98,7 +104,7 @@ t_node	*parse(t_token *token);
 int		exec(t_node *node);
 int		exec_echo(char **argv, t_node *node);
 void	do_redirect(t_node *redirect);
-void	do_heredoc(t_node *redirect);
+int		do_heredoc(t_node *redirect, char *kind);
 
 //error
 void	fatal_error(char *msg);

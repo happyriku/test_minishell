@@ -89,17 +89,17 @@ int	exec(t_node *node)
 			return (exec_echo(argv, node));
 		else
 		{
-			if (g_info.heredoc_flag && strcmp(argv[0], "cat") == 0)
-			{
-				g_info.heredoc_flag = false;
-				return (free(argv), 0);
-			}
 			if (execve(path, argv, environ) == -1)
 				return (free(argv), 0);
 		}
 	}
 	else
 	{
+		if (node->redirect->kind == ND_HEREDOC)
+		{
+			close(node->redirect->pipefd[0]);
+			close(node->redirect->pipefd[1]);
+		}
 		wait(&status);
 		free(argv);
 		return (!WIFEXITED(status));

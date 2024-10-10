@@ -78,6 +78,7 @@ t_node	*new_heredoc_node(t_token **rest, char *word, t_node_kind kind)
 	redirect->delimiter = word;
 	redirect->next = NULL;
 	redirect->kind = kind;
+	redirect->std_fd = filter_redirect((*rest)->word);
 	if (pipe(redirect->pipefd) == -1)
 		perror("pipe");
 	*rest = (*rest)->next;

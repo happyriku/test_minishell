@@ -19,12 +19,9 @@ int	open_file(t_node *redirect)
 void	do_heredoc(t_node *redirect)
 {
 	char	*line;
-	int		pipefd[2];
 	char	*buf;
 	int		n;
 
-	if (pipe(pipefd) < 0)
-		fatal_error("pipe");
 	while (1)
 	{
 		line = readline(">");
@@ -34,14 +31,14 @@ void	do_heredoc(t_node *redirect)
 				free(line);
 			break ;
 		}
-		write(pipefd[1], line, strlen(line));
-		write(pipefd[1], "\n", 1);
+		write(redirect->pipefd[1], line, strlen(line));
+		write(redirect->pipefd[1], "\n", 1);
 		free(line);
 	}
-	close(pipefd[1]);
-	while ((n = read(pipefd[0], buf, sizeof(buf))) > 0)
-		write(STDOUT_FILENO, buf, n);
-	close(pipefd[0]);
+	close(redirect->pipefd[1]);
+	// while ((n = read(pipefd[0], buf, sizeof(buf))) > 0)
+	// 	write(STDOUT_FILENO, buf, n);
+	// close(pipefd[0]);
 	return ;
 }
 
@@ -54,7 +51,9 @@ void	do_redirect(t_node *redirect)
 	if (redirect->kind == ND_HEREDOC)
 	{
 		do_heredoc(redirect);
-		g_info.heredoc_flag = true;
+		if (dup2(redirect->pipefd[0], redirect->std_fd) == -1)
+			fatal_error("dup2");
+		close(redirect->pipefd[0]);
 	}
 	else
 	{
@@ -62,6 +61,6 @@ void	do_redirect(t_node *redirect)
 		if (dup2(redirect->file_fd, redirect->std_fd) == -1)
 			fatal_error("dup2");
 		close(fd);
-		do_redirect(redirect->next);	
 	}
+	do_redirect(redirect->next);	
 }

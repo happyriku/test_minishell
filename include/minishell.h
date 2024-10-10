@@ -72,7 +72,6 @@ typedef struct s_node
 typedef struct s_info
 {
 	bool	syntax_error;
-	bool	heredoc_flag;
 
 }	t_info;
 

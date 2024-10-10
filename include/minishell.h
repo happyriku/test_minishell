@@ -72,6 +72,7 @@ typedef struct s_node
 typedef struct s_info
 {
 	bool	syntax_error;
+	bool	heredoc_flag;
 
 }	t_info;
 
@@ -104,7 +105,7 @@ t_node	*parse(t_token *token);
 int		exec(t_node *node);
 int		exec_echo(char **argv, t_node *node);
 void	do_redirect(t_node *redirect);
-int		do_heredoc(t_node *redirect, char *kind);
+void	do_heredoc(t_node *redirect);
 
 //error
 void	fatal_error(char *msg);

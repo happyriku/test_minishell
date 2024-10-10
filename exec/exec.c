@@ -95,7 +95,7 @@ int	exec(t_node *node)
 	}
 	else
 	{
-		if (node->redirect->kind == ND_HEREDOC)
+		if (node->redirect && node->redirect->kind == ND_HEREDOC)
 		{
 			close(node->redirect->pipefd[0]);
 			close(node->redirect->pipefd[1]);

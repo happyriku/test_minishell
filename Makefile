@@ -3,6 +3,8 @@ NAME = minishell
 SRCS = main.c \
 		interpret.c \
 		utils.c \
+		cleanup/cleanup_token.c \
+		cleanup/cleanup_node.c \
 		tokenize/tokenize.c \
 		tokenize/new_token.c \
 		tokenize/validation.c \

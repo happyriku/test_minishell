@@ -79,6 +79,7 @@ extern t_info g_info;
 
 int		interpret(char *input);
 void	cleanup_token(t_token **token);
+void	cleanup_node(t_node **node);
 
 //tokenize
 t_token	*tokenize(char *input);

@@ -35,6 +35,7 @@ int	main(void)
 			rl_clear_history();
 			return (free(input), EXIT_FAILED);
 		}
+		free(input);
 	}
 	return (EXIT_SUCCESS);
 }

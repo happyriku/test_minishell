@@ -86,7 +86,7 @@ int	exec(t_node *node)
 			path = argv[0];
 		}
 		if (strncmp(argv[0], "echo", 4) == 0 && argv[1] != NULL)
-			return (exec_echo(argv, node));
+			return (free(path), exec_echo(argv, node));
 		else
 		{
 			if (execve(path, argv, environ) == -1)

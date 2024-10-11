@@ -13,33 +13,6 @@ t_node	*new_node(char *word, t_node_kind kind)
 	return (node);
 }
 
-void	handle_metachar_syntax_error(char	*word)
-{
-	if (strncmp(word, ")", 1) == 0)
-		printf("bash: syntax error near unexpected token ')'\n");
-	else if (strncmp(word, "&", 1) == 0)
-	{
-		if (strcmp(word, "&") == 0)
-			printf("bash: syntax error near unexpected token '&'\n");
-		else
-			printf("bash: syntax error near unexpected token '&&'\n");
-	}
-	else if (strncmp(word, "|", 1) == 0)
-	{
-		if (strcmp(word, "|") == 0)
-			printf("bash: syntax error near unexpected token '|'\n");
-		else
-			printf("bash: syntax error near unexpected token '||'\n");		
-	}
-	else if (strncmp(word, ";", 1) == 0)
-	{
-		if (strcmp(word, ";") == 0)
-			printf("bash: syntax error near unexpected token ';'\n");
-		else
-			printf("bash: syntax error near unexpected token ';;'\n");
-	}
-}
-
 int	filter_redirect(char *word)
 {
 
@@ -175,15 +148,10 @@ t_node	*parse(t_token *token)
 	t_token	*args;
 
 	node = get_node(token);
+	if (ft_lstsize(node->args) == 1)
+	{
+		g_info.syntax_error = true;
+		printf("zsh: parse error\n");
+	}
 	return (node);
 }
-
-//printf("node->redirect->filename : %s\n", node->redirect->filename);
-	//printf("node->redirect->filename : %s\n", node->redirect->filename);
-	// if (!node->redirect->filename)
-	// {
-	// 	printf("------\n");
-	// 	printf("node->redirect->word : %s\n", node->redirect->word);
-	// 	handle_metachar_syntax_error(node->redirect->word);
-	// 	g_info.syntax_error = true;
-	// }

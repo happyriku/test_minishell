@@ -9,7 +9,7 @@ int	interpret(char *input)
 	char	*path;
 	int		i;
 	t_token	*token;
-	t_token *tmp;
+	t_token	*tmp;
 	t_info	info;
 	t_node	*node;
 	int		res;
@@ -23,11 +23,10 @@ int	interpret(char *input)
 	if (g_info.syntax_error)
 	{
 		cleanup_token(&token);
+		cleanup_node(&node);
 		g_info.syntax_error = false;
 		return (0);
 	}
-	if (!node)
-		return (1);
 	expand(node);
 	if (g_info.syntax_error)
 	{

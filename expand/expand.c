@@ -3,7 +3,6 @@
 void	append_char(char **new_word, char word)
 {
 	char	*memory;
-
 	size_t	len;
 
 	if (*new_word == NULL)

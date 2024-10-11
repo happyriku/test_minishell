@@ -36,16 +36,13 @@ void	do_heredoc(t_node *redirect)
 		free(line);
 	}
 	close(redirect->pipefd[1]);
-	// while ((n = read(pipefd[0], buf, sizeof(buf))) > 0)
-	// 	write(STDOUT_FILENO, buf, n);
-	// close(pipefd[0]);
 	return ;
 }
 
 void	do_redirect(t_node *redirect)
 {
 	int		fd;
-	
+
 	if (!redirect)
 		return ;
 	if (redirect->kind == ND_HEREDOC)
@@ -62,5 +59,5 @@ void	do_redirect(t_node *redirect)
 			fatal_error("dup2");
 		close(fd);
 	}
-	do_redirect(redirect->next);	
+	do_redirect(redirect->next);
 }

@@ -65,8 +65,8 @@ typedef struct s_node
 	char			*delimiter;
 	int				std_fd;
 	int				file_fd;
-	//pipe
 	int				pipefd[2];
+	//pipe
 }	t_node;
 
 typedef struct s_info
@@ -111,6 +111,7 @@ int		exec(t_node *node);
 int		exec_echo(char **argv, t_node *node);
 void	do_redirect(t_node *redirect);
 void	do_heredoc(t_node *redirect);
+int		exec_command(t_node *node, char **argv);
 
 //error
 void	fatal_error(char *msg);

@@ -42,15 +42,20 @@ t_node	*get_node(t_token *token)
 		else if (strncmp(token->word, ">>", 2) == 0 && token->next->kind == TK_WORD)
 			append_node(&(node->redirect), new_redirect_node(&token, token->next->word, ND_REDIRECT_APPEND));
 		else if (strncmp(token->word, "<<", 2) == 0 && token->next->kind == TK_WORD)
-			append_node(&(node->redirect), new_heredoc_node(&token, token->next->word, ND_HEREDOC));
+		{
+			if (token->next->next->word == NULL)
+				append_node(&(node->redirect), new_heredoc_node(&token, token->next->word, ND_HEREDOC));
+			else
+				token = token->next;
+		}
 		else if (strcmp(token->word, ">") == 0 && token->next->kind == TK_WORD)
-			append_node(&(node->redirect), new_redirect_node(&token, token->next->word, ND_REDIRECT_OUT));
+		 	append_node(&(node->redirect), new_redirect_node(&token, token->next->word, ND_REDIRECT_OUT));
 		else if (strcmp(token->word, "<") == 0 && token->next->kind == TK_WORD)
-			append_node(&(node->redirect), new_redirect_node(&token, token->next->word, ND_REDIRECT_IN));
+		 	append_node(&(node->redirect), new_redirect_node(&token, token->next->word, ND_REDIRECT_IN));
 		token = token->next;
 	}
 	append_token(&(node->args), new_token(NULL, TK_EOF));
-	return (node);	
+	return (node);
 }
 
 t_node	*parse(t_token *token)

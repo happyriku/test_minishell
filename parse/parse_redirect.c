@@ -1,6 +1,6 @@
 #include "../include/minishell.h"
 
-int	filter_redirect(char *word)
+int	get_std_fd(char *word)
 {
 
 	if (strncmp(word, ">>", 2) == 0)
@@ -23,7 +23,7 @@ t_node	*new_redirect_node(t_token **rest, char *word, t_node_kind kind)
 	redirect->filename = word;
 	redirect->next = NULL;
 	redirect->kind = kind;
-	redirect->std_fd = filter_redirect((*rest)->word);
+	redirect->std_fd = get_std_fd((*rest)->word);
 	*rest = (*rest)->next;
 	return (redirect);
 }
@@ -38,18 +38,18 @@ t_node	*new_heredoc_node(t_token **rest, char *word, t_node_kind kind)
 	redirect->delimiter = word;
 	redirect->next = NULL;
 	redirect->kind = kind;
-	redirect->std_fd = filter_redirect((*rest)->word);
+	redirect->std_fd = get_std_fd((*rest)->word);
 	if (pipe(redirect->pipefd) == -1)
 		perror("pipe");
 	*rest = (*rest)->next;
 	return (redirect);
 }
 
-// bool	has_redirect(t_token *token)
-// {
-// 	if (strcmp(token->word, ">") == 0 || strcmp(token->word, "<") == 0
-// 		|| strcmp(token->word, ">>") == 0 || strcmp(token->word, "<<") == 0)
-// 		return (true);
-// 	else
-// 		return (false);
-// }
+bool	has_redirect(t_token *token)
+{
+	if (strcmp(token->word, ">") == 0 || strcmp(token->word, "<") == 0
+		|| strcmp(token->word, ">>") == 0)
+		return (true);
+	else
+		return (false);
+}

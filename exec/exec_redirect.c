@@ -16,6 +16,7 @@ int	open_file(t_node *redirect)
 	return (fd);
 }
 
+
 void	do_heredoc(t_node *redirect)
 {
 	char	*line;
@@ -42,7 +43,11 @@ void	do_heredoc(t_node *redirect)
 void	do_redirect(t_node *redirect)
 {
 	int		fd;
+	char	*buf;
 
+	buf = malloc(sizeof(char));
+	if (!buf)
+		fatal_error("error");
 	if (!redirect)
 		return ;
 	if (redirect->kind == ND_HEREDOC)
@@ -51,6 +56,7 @@ void	do_redirect(t_node *redirect)
 		if (dup2(redirect->pipefd[0], redirect->std_fd) == -1)
 			fatal_error("dup2");
 		close(redirect->pipefd[0]);
+		return ;
 	}
 	else
 	{

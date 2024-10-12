@@ -64,10 +64,7 @@ int	exec(t_node *node)
 		return (MALLOC_ERROR);
 	setup_argv(argv, node->args);
 	if (strncmp(argv[0], "exit", 4) == 0)
-	{
-		printf("exit\n");
-		return (free(argv), -1);
-	}
+		return (free(argv), printf("exit\n"), -1);
 	pid = fork();
 	if (pid < 0)
 		return (free(argv), -1);
@@ -90,7 +87,7 @@ int	exec(t_node *node)
 		else
 		{
 			if (execve(path, argv, environ) == -1)
-				return (free(argv), 0);
+				return (free(argv), free(path), 0);
 		}
 	}
 	else
@@ -100,7 +97,8 @@ int	exec(t_node *node)
 			close(node->redirect->pipefd[0]);
 			close(node->redirect->pipefd[1]);
 		}
-		wait(&status);
+		if (wait(&status) == -1)
+			fatal_error("wait");
 		free(argv);
 		return (!WIFEXITED(status));
 	}

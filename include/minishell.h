@@ -100,6 +100,10 @@ size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
 
 //parse
 t_node	*parse(t_token *token);
+t_node	*new_redirect_node(t_token **rest, char *word, t_node_kind kind);
+t_node	*new_heredoc_node(t_token **rest, char *word, t_node_kind kind);
+void	append_node(t_node	**redirect, t_node *node);
+void	append_token(t_token **args, t_token *token);
 
 //exec
 int		exec(t_node *node);

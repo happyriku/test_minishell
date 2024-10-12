@@ -10,6 +10,8 @@ SRCS = main.c \
 		tokenize/validation.c \
 		expand/expand.c \
 		parse/parse.c \
+		parse/parse_redirect.c \
+		parse/append.c \
 		exec/exec.c \
 		exec/exec_echo.c \
 		exec/exec_redirect.c \

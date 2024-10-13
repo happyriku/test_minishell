@@ -13,7 +13,7 @@ int	get_std_fd(char *word)
 		return (STDIN_FILENO);
 }
 
-t_node	*new_redirect_node(t_token **rest, char *word, t_node_kind kind)
+t_node	*redirect_node(t_token **rest, char *word, t_node_kind kind)
 {
 	t_node	*redirect;
 
@@ -28,7 +28,7 @@ t_node	*new_redirect_node(t_token **rest, char *word, t_node_kind kind)
 	return (redirect);
 }
 
-t_node	*new_heredoc_node(t_token **rest, char *word, t_node_kind kind)
+t_node	*heredoc_node(t_token **rest, char *word, t_node_kind kind)
 {
 	t_node	*redirect;
 
@@ -40,7 +40,7 @@ t_node	*new_heredoc_node(t_token **rest, char *word, t_node_kind kind)
 	redirect->kind = kind;
 	redirect->std_fd = get_std_fd((*rest)->word);
 	if (pipe(redirect->pipefd) == -1)
-		perror("pipe");
+		fatal_error("pipe");
 	*rest = (*rest)->next;
 	return (redirect);
 }

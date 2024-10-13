@@ -42,6 +42,7 @@ typedef enum e_node_kind
 	ND_REDIRECT_IN,
 	ND_REDIRECT_APPEND,
 	ND_HEREDOC,
+	ND_PIPELINE,
 
 }	t_node_kind;
 
@@ -67,6 +68,8 @@ typedef struct s_node
 	int				file_fd;
 	int				pipefd[2];
 	//pipe
+	int				fd[2];
+	struct s_node	*pipeline;
 }	t_node;
 
 typedef struct s_info
@@ -100,8 +103,8 @@ size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
 
 //parse
 t_node	*parse(t_token *token);
-t_node	*new_redirect_node(t_token **rest, char *word, t_node_kind kind);
-t_node	*new_heredoc_node(t_token **rest, char *word, t_node_kind kind);
+t_node	*redirect_node(t_token **rest, char *word, t_node_kind kind);
+t_node	*heredoc_node(t_token **rest, char *word, t_node_kind kind);
 void	append_node(t_node	**redirect, t_node *node);
 void	append_token(t_token **args, t_token *token);
 bool	has_redirect(t_token *token);

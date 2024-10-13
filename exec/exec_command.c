@@ -47,7 +47,7 @@ int	exec_command(t_node *node, char **argv)
 	else if (pid == 0)
 	{
 		if (node->redirect != NULL)
-			do_redirect(node->redirect);
+			do_redirect(node->redirect);	
 		path = search_path(argv[0]);
 		if (!path)
 		{	

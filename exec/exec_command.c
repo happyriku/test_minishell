@@ -35,11 +35,24 @@ char	*search_path(char *input)
 	return (NULL);
 }
 
+int	exec_command_parent(t_node *node)
+{
+	int	status;
+
+	if (node->redirect && node->redirect->kind == ND_HEREDOC)
+	{
+		close(node->redirect->pipefd[0]);
+		close(node->redirect->pipefd[1]);
+	}
+	if (wait(&status) == -1)
+		fatal_error("wait");
+	return (!WIFEXITED(status));
+}
+
 int	exec_command(t_node *node, char **argv)
 {
 	int		pid;
 	char	*path;
-	int		status;
 
 	pid = fork();
 	if (pid < 0)
@@ -67,16 +80,17 @@ int	exec_command(t_node *node, char **argv)
 		}
 	}
 	else
-	{
-		if (node->redirect && node->redirect->kind == ND_HEREDOC)
-		{
-			close(node->redirect->pipefd[0]);
-			close(node->redirect->pipefd[1]);
-		}
-		if (wait(&status) == -1)
-			fatal_error("wait");
-		free(argv);
-		return (!WIFEXITED(status));
-	}
+		return (free(argv), exec_command_parent(node));
+	// {
+	// 	if (node->redirect && node->redirect->kind == ND_HEREDOC)
+	// 	{
+	// 		close(node->redirect->pipefd[0]);
+	// 		close(node->redirect->pipefd[1]);
+	// 	}
+	// 	if (wait(&status) == -1)
+	// 		fatal_error("wait");
+	// 	free(argv);
+	// 	return (!WIFEXITED(status));
+	// }
 	return (0);
 }

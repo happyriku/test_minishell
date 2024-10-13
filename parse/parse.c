@@ -69,8 +69,6 @@ t_node	*parse(t_token *token)
 {
 	t_node	*node;
 	t_token	*args;
-	t_node	*tmp;
-	t_token	*cur;
 
 	node = get_node(&token, token);
 	if (ft_lstsize(node->args) == 1)
@@ -80,17 +78,5 @@ t_node	*parse(t_token *token)
 	}
 	if (token->word && strcmp(token->word, "|") == 0)
 		node->next = parse(token->next);
-	// tmp = node;
-	// cur = node->args;
-	// while (tmp)
-	// {
-	// 	while (cur)
-	// 	{
-	// 		printf("cur->word : %s\n", cur->word);
-	// 		cur = cur->next;
-	// 	}
-	// 	printf("|\n");
-	// 	tmp = tmp->next;
-	// }
 	return (node);
 }

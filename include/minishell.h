@@ -25,6 +25,7 @@
 # include <stdbool.h>
 # include <signal.h>
 # include <fcntl.h>
+# include <errno.h>
 
 typedef enum e_kind
 {
@@ -68,13 +69,14 @@ typedef struct s_node
 	int				file_fd;
 	int				pipefd[2];
 	//pipe
-	int				fd[2];
+	int				pfd[2];
 	struct s_node	*pipeline;
 }	t_node;
 
 typedef struct s_info
 {
 	bool	syntax_error;
+	bool	fatal_error;
 
 }	t_info;
 
@@ -114,7 +116,7 @@ int		exec(t_node *node);
 int		exec_echo(char **argv, t_node *node);
 void	do_redirect(t_node *redirect);
 void	do_heredoc(t_node *redirect);
-int		exec_command(t_node *node, char **argv);
+int		exec_command(t_node *node, char **argv, int in_fd);
 
 //error
 void	fatal_error(char *msg);

@@ -22,10 +22,8 @@ int	interpret(char *input)
 	node = parse(token);
 	if (g_info.syntax_error)
 	{
-		cleanup_token(&token);
-		cleanup_node(&node);
 		g_info.syntax_error = false;
-		return (0);
+		return (cleanup_token(&token), cleanup_node(&node), 0);
 	}
 	expand(node);
 	if (g_info.syntax_error)

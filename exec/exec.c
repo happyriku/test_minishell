@@ -32,5 +32,5 @@ int	exec(t_node *node)
 	setup_argv(argv, node->args);
 	if (strncmp(argv[0], "exit", 4) == 0)
 		return (free(argv), printf("exit\n"), -1);
-	return (exec_command(node, argv));
+	return (exec_command(node, argv, STDIN_FILENO));
 }

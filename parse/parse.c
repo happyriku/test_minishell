@@ -13,24 +13,11 @@ t_node	*new_node(char *word, t_node_kind kind)
 	return (node);
 }
 
-t_node *pipe_node(t_token **rest, char *word, t_node_kind kind)
-{
-	t_node	*pipeline;
-
-	pipeline = malloc(sizeof(t_node));
-	if (!pipe)
-		return (NULL);
-	if (pipe(pipeline->fd) == -1)
-		fatal_error("pipe");
-	return (pipeline);
-}
-
 t_node	*get_node(t_token **rest, t_token *token)
 {
 	t_node	*node;
 	t_token	*args;
 	t_node	*redirect;
-	t_node	*pipeline;
 
 	node = new_node(NULL, ND_SIMPLE_CMD);
 	node->args = new_token(NULL, TK_EOF);

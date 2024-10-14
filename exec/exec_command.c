@@ -35,30 +35,38 @@ char	*search_path(char *input)
 	return (NULL);
 }
 
-int	exec_command_parent(t_node *node)
-{
-	int	status;
-
-	if (node->redirect && node->redirect->kind == ND_HEREDOC)
-	{
-		close(node->redirect->pipefd[0]);
-		close(node->redirect->pipefd[1]);
-	}
-	if (wait(&status) == -1)
-		fatal_error("wait");
-	return (!WIFEXITED(status));
-}
-
-int	exec_command(t_node *node, char **argv)
+int	exec_command(t_node *node, char **argv, int in_fd)
 {
 	int		pid;
 	char	*path;
+	int		status;
 
+	if (pipe(node->pfd) == -1)
+		fatal_error("pipe");
 	pid = fork();
 	if (pid < 0)
 		return (free(argv), -1);
 	else if (pid == 0)
 	{
+		close(node->pfd[0]);
+		if (in_fd != STDIN_FILENO)
+		{
+			if (dup2(in_fd, STDIN_FILENO) == -1)
+			{
+				fprintf(stderr, "dup2 error: %s\n", strerror(errno));
+				exit(EXIT_FAILED);
+			}
+			close(in_fd);
+		}
+		else if (node->next)
+		{
+			if (dup2(node->pfd[1], STDOUT_FILENO) == -1)
+			{
+				fprintf(stderr, "dup2 error: %s\n", strerror(errno));
+				exit(EXIT_FAILED);
+			}
+		}
+		close(node->pfd[1]);
 		if (node->redirect != NULL)
 			do_redirect(node->redirect);	
 		path = search_path(argv[0]);
@@ -80,17 +88,15 @@ int	exec_command(t_node *node, char **argv)
 		}
 	}
 	else
-		return (free(argv), exec_command_parent(node));
-	// {
-	// 	if (node->redirect && node->redirect->kind == ND_HEREDOC)
-	// 	{
-	// 		close(node->redirect->pipefd[0]);
-	// 		close(node->redirect->pipefd[1]);
-	// 	}
-	// 	if (wait(&status) == -1)
-	// 		fatal_error("wait");
-	// 	free(argv);
-	// 	return (!WIFEXITED(status));
-	// }
+	{
+		close(node->pfd[1]);
+		if (in_fd != STDIN_FILENO)
+			close(in_fd);
+		if (node->next)
+			exec_command(node, argv, node->pfd[0]);
+		if (wait(&status) == -1)
+			fatal_error("wait");
+		return (free(argv), !WIFEXITED(status));
+	}
 	return (0);
 }

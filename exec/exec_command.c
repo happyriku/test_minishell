@@ -35,7 +35,7 @@ char	*search_path(char *input)
 	return (NULL);
 }
 
-int	exec_command(t_node *node, char **argv, int in_fd)
+int	exec_command(t_node *node, int in_fd)
 {
 	int		pid;
 	char	*path;
@@ -45,7 +45,8 @@ int	exec_command(t_node *node, char **argv, int in_fd)
 		fatal_error("pipe");
 	pid = fork();
 	if (pid < 0)
-		return (free(argv), -1);
+		return (-1);
+		//return (free(argv), -1);
 	else if (pid == 0)
 	{
 		close(node->pfd[0]);
@@ -69,22 +70,24 @@ int	exec_command(t_node *node, char **argv, int in_fd)
 		close(node->pfd[1]);
 		if (node->redirect != NULL)
 			do_redirect(node->redirect);	
-		path = search_path(argv[0]);
+		path = search_path(node->args->arr[0]);
 		if (!path)
 		{	
-			if (!strchr(argv[0], '/'))
+			if (!strchr(node->args->arr[0], '/'))
 			{
-				printf("%s: command not found\n", argv[0]);
-				return (free(argv), 1);
+				printf("%s: command not found\n", node->args->arr[0]);
+				return (1);
+				//return (free(argv), 1);
 			}
-			path = argv[0];
+			path = node->args->arr[0];
 		}
-		if (strncmp(argv[0], "echo", 4) == 0 && argv[1] != NULL)
-			return (free(path), exec_echo(argv, node));
+		if (strncmp(node->args->arr[0], "echo", 4) == 0 && node->args->arr[1] != NULL)
+			return (free(path), exec_echo(node->args->arr, node));
 		else
 		{
-			if (execve(path, argv, environ) == -1)
-				return (free(argv), free(path), 0);
+			if (execve(path, node->args->arr, environ) == -1)
+				return (free(path), 0);
+				//return (free(argv), free(path), 0);
 		}
 	}
 	else
@@ -93,10 +96,11 @@ int	exec_command(t_node *node, char **argv, int in_fd)
 		if (in_fd != STDIN_FILENO)
 			close(in_fd);
 		if (node->next)
-			exec_command(node->next, argv, node->pfd[0]);
+			exec_command(node->next, node->pfd[0]);
 		if (wait(&status) == -1)
 			fatal_error("wait");
-		return (free(argv), !WIFEXITED(status));
+		return (!WIFEXITED(status));
+		//return (free(argv), !WIFEXITED(status));
 	}
 	return (0);
 }

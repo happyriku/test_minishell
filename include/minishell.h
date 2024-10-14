@@ -52,6 +52,8 @@ typedef struct s_token
 	t_kind			kind;
 	struct s_token	*next;
 	char			*word;
+	//execve
+	char			**arr;
 	int				pid;
 }	t_token;
 
@@ -116,7 +118,7 @@ int		exec(t_node *node);
 int		exec_echo(char **argv, t_node *node);
 void	do_redirect(t_node *redirect);
 void	do_heredoc(t_node *redirect);
-int		exec_command(t_node *node, char **argv, int in_fd);
+int		exec_command(t_node *node, int in_fd);
 
 //error
 void	fatal_error(char *msg);

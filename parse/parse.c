@@ -76,7 +76,6 @@ t_node	*get_node(t_token **rest, t_token *token)
 		token = token->next;
 	}
 	append_token(&(node->args), new_token(NULL, TK_EOF));
-	append_argv(&(node->args));
 	*rest = token;
 	return (node);
 }

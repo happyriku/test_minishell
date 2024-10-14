@@ -59,7 +59,7 @@ int	exec_command(t_node *node, int in_fd)
 			}
 			close(in_fd);
 		}
-		else if (node->next)
+		if (node->next)
 		{
 			if (dup2(node->pfd[1], STDOUT_FILENO) == -1)
 			{
@@ -83,12 +83,9 @@ int	exec_command(t_node *node, int in_fd)
 		}
 		if (strncmp(node->args->arr[0], "echo", 4) == 0 && node->args->arr[1] != NULL)
 			return (free(path), exec_echo(node->args->arr, node));
-		else
-		{
-			if (execve(path, node->args->arr, environ) == -1)
+		if (execve(path, node->args->arr, environ) == -1)
 				return (free(path), 0);
 				//return (free(argv), free(path), 0);
-		}
 	}
 	else
 	{

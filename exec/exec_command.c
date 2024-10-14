@@ -93,7 +93,7 @@ int	exec_command(t_node *node, char **argv, int in_fd)
 		if (in_fd != STDIN_FILENO)
 			close(in_fd);
 		if (node->next)
-			exec_command(node, argv, node->pfd[0]);
+			exec_command(node->next, argv, node->pfd[0]);
 		if (wait(&status) == -1)
 			fatal_error("wait");
 		return (free(argv), !WIFEXITED(status));

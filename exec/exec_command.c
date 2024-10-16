@@ -35,6 +35,29 @@ char	*search_path(char *input)
 	return (NULL);
 }
 
+void	prepare_child_pipe(t_node *node, int in_fd)
+{
+	close(node->pfd[0]);
+	if (in_fd != STDIN_FILENO)
+	{
+		if (dup2(in_fd, STDIN_FILENO) == -1)
+		{
+			fprintf(stderr, "dup2 error: %s\n", strerror(errno));
+			exit(EXIT_FAILED);
+		}
+		close(in_fd);
+	}
+	if (node->next)
+	{
+		if (dup2(node->pfd[1], STDOUT_FILENO) == -1)
+		{
+			fprintf(stderr, "dup2 error: %s\n", strerror(errno));
+			exit(EXIT_FAILED);
+		}
+	}
+	close(node->pfd[1]);	
+}
+
 int	exec_command(t_node *node, int in_fd)
 {
 	int		pid;
@@ -46,28 +69,9 @@ int	exec_command(t_node *node, int in_fd)
 	pid = fork();
 	if (pid < 0)
 		return (-1);
-		//return (free(argv), -1);
 	else if (pid == 0)
 	{
-		close(node->pfd[0]);
-		if (in_fd != STDIN_FILENO)
-		{
-			if (dup2(in_fd, STDIN_FILENO) == -1)
-			{
-				fprintf(stderr, "dup2 error: %s\n", strerror(errno));
-				exit(EXIT_FAILED);
-			}
-			close(in_fd);
-		}
-		if (node->next)
-		{
-			if (dup2(node->pfd[1], STDOUT_FILENO) == -1)
-			{
-				fprintf(stderr, "dup2 error: %s\n", strerror(errno));
-				exit(EXIT_FAILED);
-			}
-		}
-		close(node->pfd[1]);
+		prepare_child_pipe(node, in_fd);
 		if (node->redirect != NULL)
 			do_redirect(node->redirect);	
 		path = search_path(node->args->arr[0]);
@@ -77,7 +81,6 @@ int	exec_command(t_node *node, int in_fd)
 			{
 				printf("%s: command not found\n", node->args->arr[0]);
 				return (1);
-				//return (free(argv), 1);
 			}
 			path = node->args->arr[0];
 		}
@@ -85,7 +88,6 @@ int	exec_command(t_node *node, int in_fd)
 			return (free(path), exec_echo(node->args->arr, node));
 		if (execve(path, node->args->arr, environ) == -1)
 				return (free(path), 0);
-				//return (free(argv), free(path), 0);
 	}
 	else
 	{
@@ -97,7 +99,6 @@ int	exec_command(t_node *node, int in_fd)
 		if (wait(&status) == -1)
 			fatal_error("wait");
 		return (!WIFEXITED(status));
-		//return (free(argv), !WIFEXITED(status));
 	}
 	return (0);
 }

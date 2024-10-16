@@ -2,20 +2,32 @@
 
 extern char **environ;
 
-void	setup_argv(char **argv, t_token *args)
+void	append_argv(t_token **args)
 {
-	int		i;
-	t_token	*cur;
+    int argc;
+    t_token *cur;
 
-	cur = args;
-	i = 0;
-	while (cur->word)
-	{
-		argv[i] = cur->word;
-		cur = cur->next;
-		i++;
-	}
-	argv[i] = NULL;
+    cur = *args;
+    argc = 0;
+    while (cur && cur->kind != TK_EOF)
+    {
+        argc++;
+        cur = cur->next;
+    }
+    (*args)->arr = (char **)malloc(sizeof(char *) * (argc + 1));
+    if (!(*args)->arr)
+        fatal_error("malloc");
+    argc = 0;
+    cur = *args;
+    while (cur && cur->kind != TK_EOF)
+    {
+        (*args)->arr[argc] = strdup(cur->word);
+        if (!((*args)->arr[argc]))
+            fatal_error("malloc");
+        cur = cur->next;
+        argc++;
+    }
+    (*args)->arr[argc] = NULL; 
 }
 
 int	exec(t_node *node)
@@ -30,15 +42,10 @@ int	exec(t_node *node)
     cur = node;
     while (cur)
     {
-        append_argv(&cur->args); // 引数を追加
-        cur = cur->next; // 次のノードへ進む
+        append_argv(&cur->args);
+        cur = cur->next;
     }
 	if (strncmp(node->args->arr[0], "exit", 4) == 0)
 		return (free(argv), printf("exit\n"), -1);
 	return (exec_command(node, STDIN_FILENO));
 }
-
-	// argv = (char **)malloc(sizeof(char *) * (ft_lstsize(node->args) + 1));
-	// if (!argv)
-	// 	return (MALLOC_ERROR);
-	// setup_argv(argv, node->args);

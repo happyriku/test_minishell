@@ -111,7 +111,6 @@ t_node	*redirect_node(t_token **rest, char *word, t_node_kind kind);
 t_node	*heredoc_node(t_token **rest, char *word, t_node_kind kind);
 void	append_node(t_node	**redirect, t_node *node);
 void	append_token(t_token **args, t_token *token);
-void	append_argv(t_token **args);
 bool	has_redirect(t_token *token);
 
 //exec

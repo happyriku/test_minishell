@@ -4,7 +4,6 @@ int	open_file(t_node *redirect)
 {
 	int	fd;
 
-	printf("redirect->filename : %s\n", redirect->filename);
 	if (redirect->kind == ND_REDIRECT_OUT)
 		fd = open(redirect->filename,
 				O_CREAT | O_WRONLY | O_TRUNC, 0644);
@@ -17,6 +16,15 @@ int	open_file(t_node *redirect)
 	return (fd);
 }
 
+int	stashfd(int	std_fd)
+{
+	int	stash_fd;
+
+	stash_fd = dup(std_fd);
+	if (stash_fd == -1)
+		fatal_error("dup");
+	return (stash_fd);
+}
 
 void	do_heredoc(t_node *redirect)
 {
@@ -43,7 +51,6 @@ void	do_heredoc(t_node *redirect)
 
 void	do_redirect(t_node *redirect)
 {
-	int		fd;
 	char	*buf;
 
 	buf = malloc(sizeof(char));
@@ -61,10 +68,10 @@ void	do_redirect(t_node *redirect)
 	}
 	else
 	{
+		redirect->stash_fd = stashfd(redirect->std_fd);
 		redirect->file_fd = open_file(redirect);
 		if (dup2(redirect->file_fd, redirect->std_fd) == -1)
 			fatal_error("dup2");
-		close(fd);
 	}
 	do_redirect(redirect->next);
 }

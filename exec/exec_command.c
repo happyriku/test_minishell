@@ -47,8 +47,6 @@ void	prepare_child_pipe(t_node *node, int in_fd)
 		}
 		close(in_fd);
 	}
-	if (node->redirect)
-		do_redirect(node->redirect);
 	if (node->next)
 	{
 		if (dup2(node->pfd[1], STDOUT_FILENO) == -1)
@@ -58,6 +56,15 @@ void	prepare_child_pipe(t_node *node, int in_fd)
 		}
 	}
 	close(node->pfd[1]);
+}
+
+void	reset_redirect(t_node *redirect)
+{
+	close(redirect->file_fd);
+	if (dup2(redirect->stash_fd, redirect->std_fd) == -1)
+		fatal_error("dup2");
+	close(redirect->stash_fd);
+	close(redirect->std_fd);
 }
 
 int	exec_command(t_node *node, int in_fd)
@@ -74,8 +81,8 @@ int	exec_command(t_node *node, int in_fd)
 	else if (pid == 0)
 	{
 		prepare_child_pipe(node, in_fd);
-		// if (node->redirect != NULL)
-		// 	do_redirect(node->redirect);
+		if (node->redirect)
+			do_redirect(node->redirect);
 		path = search_path(node->args->arr[0]);
 		if (!path)
 		{	

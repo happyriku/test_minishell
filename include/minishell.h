@@ -69,6 +69,7 @@ typedef struct s_node
 	char			*delimiter;
 	int				std_fd;
 	int				file_fd;
+	int				stash_fd;
 	int				pipefd[2];
 	//pipe
 	int				pfd[2];

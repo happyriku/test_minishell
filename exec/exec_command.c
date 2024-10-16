@@ -47,6 +47,8 @@ void	prepare_child_pipe(t_node *node, int in_fd)
 		}
 		close(in_fd);
 	}
+	if (node->redirect)
+		do_redirect(node->redirect);
 	if (node->next)
 	{
 		if (dup2(node->pfd[1], STDOUT_FILENO) == -1)
@@ -55,7 +57,7 @@ void	prepare_child_pipe(t_node *node, int in_fd)
 			exit(EXIT_FAILED);
 		}
 	}
-	close(node->pfd[1]);	
+	close(node->pfd[1]);
 }
 
 int	exec_command(t_node *node, int in_fd)
@@ -72,8 +74,8 @@ int	exec_command(t_node *node, int in_fd)
 	else if (pid == 0)
 	{
 		prepare_child_pipe(node, in_fd);
-		if (node->redirect != NULL)
-			do_redirect(node->redirect);	
+		// if (node->redirect != NULL)
+		// 	do_redirect(node->redirect);
 		path = search_path(node->args->arr[0]);
 		if (!path)
 		{	

@@ -4,6 +4,7 @@ int	open_file(t_node *redirect)
 {
 	int	fd;
 
+	printf("redirect->filename : %s\n", redirect->filename);
 	if (redirect->kind == ND_REDIRECT_OUT)
 		fd = open(redirect->filename,
 				O_CREAT | O_WRONLY | O_TRUNC, 0644);

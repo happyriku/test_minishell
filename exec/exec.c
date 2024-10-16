@@ -46,6 +46,6 @@ int	exec(t_node *node)
         cur = cur->next;
     }
 	if (strncmp(node->args->arr[0], "exit", 4) == 0)
-		return (free(argv), printf("exit\n"), -1);
+		return (printf("exit\n"), -1);
 	return (exec_command(node, STDIN_FILENO));
 }

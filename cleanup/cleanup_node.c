@@ -51,7 +51,8 @@ void	cleanup_node(t_node **node)
 			i = -1;
 			while (cur->args->arr && cur->args->arr[++i])
 				free(cur->args->arr[i]);
-			free(cur->args->arr);
+			if (cur->args->arr)
+				free(cur->args->arr);
 			if (cur->args->next)
 			{
 				tmp = cur->args->next;

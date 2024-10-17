@@ -60,6 +60,7 @@ void	prepare_child_pipe(t_node *node, int in_fd)
 
 void	reset_redirect(t_node *redirect)
 {
+	printf("---------\n");
 	close(redirect->file_fd);
 	if (dup2(redirect->stash_fd, redirect->std_fd) == -1)
 		fatal_error("dup2");
@@ -95,7 +96,8 @@ int	exec_command(t_node *node, int in_fd)
 		if (is_builtin(node->args->arr))
 		{
 			exec_builtin(node);
-			reset_redirect(node->redirect);
+			if (node->redirect)
+				reset_redirect(node->redirect);
 			exit(EXIT_SUCCESS);
 		}
 		else

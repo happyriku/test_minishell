@@ -39,13 +39,36 @@ void	cleanup_node(t_node **node)
 {
 	t_node	*cur;
 	t_node	*next;
+	int		i;
+	t_token	*args;
+	t_token	*tmp;
 
-	cleanup_node_args((*node)->args);
-	cleanup_redirect((*node)->redirect);
-	while (*node)
+	cur = *node;
+	while (cur)
 	{
-		cur = (*node)->next;
-		free(*node);
-		*node = cur;
+		if (cur->args)
+		{
+			i = -1;
+			while (cur->args->arr && cur->args->arr[++i])
+				free(cur->args->arr[i]);
+			free(cur->args->arr);
+			if (cur->args->next)
+			{
+				tmp = cur->args->next;
+				free(cur->args);
+				cur->args = tmp;
+			}
+			else
+				cur->args = NULL;
+		}
+		cur = cur->next;
 	}
+	//cleanup_node_args((*node)->args);
+	cleanup_redirect((*node)->redirect);
+	// while (*node)
+	// {
+	// 	cur = (*node)->next;
+	// 	free(*node);
+	// 	*node = cur;
+	// }
 }

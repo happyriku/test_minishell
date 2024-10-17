@@ -28,6 +28,7 @@ void	append_argv(t_token **args)
         argc++;
     }
     (*args)->arr[argc] = NULL; 
+    (*args)->next->arr = NULL;
 }
 
 int	exec(t_node *node)

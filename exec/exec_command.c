@@ -98,6 +98,11 @@ int	exec_command(t_node *node, int in_fd)
 	}
 	else
 	{
+		if (node->redirect && node->redirect->kind == ND_HEREDOC)
+		{
+			close(node->redirect->pipefd[0]);
+			close(node->redirect->pipefd[1]);
+		}
 		//close(node->pfd[1]);
 		// if (in_fd != STDIN_FILENO)
 		// 	close(in_fd);

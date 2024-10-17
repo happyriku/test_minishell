@@ -116,10 +116,14 @@ bool	has_redirect(t_token *token);
 
 //exec
 int		exec(t_node *node);
-int		exec_echo(char **argv, t_node *node);
+void	exec_echo(char **argv, t_node *node);
+void	exec_builtin(t_node *node);
+void	exec_nonbuiltin(t_node *node);
 void	do_redirect(t_node *redirect);
 void	do_heredoc(t_node *redirect);
 int		exec_command(t_node *node, int in_fd);
+
+char	*search_path(char *input);
 
 //error
 void	fatal_error(char *msg);

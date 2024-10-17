@@ -16,6 +16,7 @@ SRCS = main.c \
 		exec/exec_echo.c \
 		exec/exec_redirect.c \
 		exec/exec_command.c \
+		exec/exec_builtin.c \
 
 OBJS = $(SRCS:.c=.o)
 

@@ -60,11 +60,9 @@ void	prepare_child_pipe(t_node *node, int in_fd)
 
 void	reset_redirect(t_node *redirect)
 {
-	close(redirect->file_fd);
 	if (dup2(redirect->stash_fd, redirect->std_fd) == -1)
 		fatal_error("dup2");
 	close(redirect->stash_fd);
-	close(redirect->std_fd);
 }
 
 int	exec_command(t_node *node, int in_fd)
@@ -73,14 +71,14 @@ int	exec_command(t_node *node, int in_fd)
 	char	*path;
 	int		status;
 
-	if (pipe(node->pfd) == -1)
-		fatal_error("pipe");
+	// if (pipe(node->pfd) == -1)
+	// 	fatal_error("pipe");
 	pid = fork();
 	if (pid < 0)
 		return (-1);
 	else if (pid == 0)
 	{
-		prepare_child_pipe(node, in_fd);
+		//prepare_child_pipe(node, in_fd);
 		if (node->redirect)
 			do_redirect(node->redirect);
 		path = search_path(node->args->arr[0]);
@@ -100,11 +98,13 @@ int	exec_command(t_node *node, int in_fd)
 	}
 	else
 	{
-		close(node->pfd[1]);
-		if (in_fd != STDIN_FILENO)
-			close(in_fd);
-		if (node->next)
-			exec_command(node->next, node->pfd[0]);
+		//close(node->pfd[1]);
+		// if (in_fd != STDIN_FILENO)
+		// 	close(in_fd);
+		// if (node->next)
+		// 	exec_command(node->next, node->pfd[0]);
+		// else
+		// 	close(node->pfd[0]);
 		if (wait(&status) == -1)
 			fatal_error("wait");
 		return (!WIFEXITED(status));

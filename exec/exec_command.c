@@ -60,7 +60,6 @@ void	prepare_child_pipe(t_node *node, int in_fd)
 
 void	reset_redirect(t_node *redirect)
 {
-	printf("---------\n");
 	close(redirect->file_fd);
 	if (dup2(redirect->stash_fd, redirect->std_fd) == -1)
 		fatal_error("dup2");
@@ -105,24 +104,6 @@ int	exec_command(t_node *node, int in_fd)
 			exec_nonbuiltin(node);
 			exit(EXIT_SUCCESS);
 		}
-		// path = search_path(node->args->arr[0]);
-		// if (!path)
-		// {	
-		// 	if (!strchr(node->args->arr[0], '/'))
-		// 	{
-		// 		printf("%s: command not found\n", node->args->arr[0]);
-		// 		exit(EXIT_SUCCESS);
-		// 	}
-		// 	path = node->args->arr[0];
-		// }
-		// if (strncmp(node->args->arr[0], "echo", 4) == 0 && node->args->arr[1] != NULL)
-		// {
-		// 	free(path);
-		// 	exec_echo(node->args->arr, node);
-		// 	exit(EXIT_SUCCESS);
-		// }
-		// if (!is_builtin(node->args->arr) && execve(path, node->args->arr, environ) == -1)
-		// 	exit(EXIT_SUCCESS); //free(path) deleteしました
 	}
 	else
 	{

@@ -16,13 +16,14 @@ int	open_file(t_node *redirect)
 	return (fd);
 }
 
-int	stashfd(int	std_fd)
+int	stashfd(int std_fd)
 {
 	int	stash_fd;
 
 	stash_fd = dup(std_fd);
 	if (stash_fd == -1)
 		fatal_error("dup");
+	close(std_fd);
 	return (stash_fd);
 }
 

@@ -53,6 +53,8 @@ void	cleanup_node(t_node **node)
 				free(cur->args->arr[i]);
 			if (cur->args->arr)
 				free(cur->args->arr);
+			if (cur->args->word)
+				free(cur->args->word);
 			if (cur->args->next)
 			{
 				tmp = cur->args->next;

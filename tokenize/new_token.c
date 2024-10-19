@@ -17,3 +17,18 @@ t_token	*new_token(char *str, t_kind kind)
 	new_token->kind = kind;
 	return (new_token);
 }
+
+t_token	*tokdup(t_token *token)
+{
+	t_token *new_tok;
+
+	new_tok = (t_token *)malloc(sizeof(t_token));
+	if (!new_tok)
+		return (NULL);
+	new_tok->word = strdup(token->word);
+	if (!new_tok->word)
+		fatal_error("strdup");
+	new_tok->kind = token->kind;
+	return (new_tok);
+
+}

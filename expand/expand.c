@@ -32,6 +32,7 @@ bool	is_closed_quote(char *word)
 	int	single_quote_count;
 	int	double_quote_count;
 
+	printf("word : %s\n", word);
 	single_quote_count = 0;
 	double_quote_count = 0;
 	while (*word)

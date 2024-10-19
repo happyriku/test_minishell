@@ -20,7 +20,7 @@ t_node	*redirect_node(t_token **rest, char *word, t_node_kind kind)
 	redirect = malloc(sizeof(t_node));
 	if (!redirect)
 		return (NULL);
-	redirect->filename = word;
+	redirect->filename = strdup(word);
 	redirect->next = NULL;
 	redirect->kind = kind;
 	redirect->std_fd = get_std_fd((*rest)->word);

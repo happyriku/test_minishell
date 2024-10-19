@@ -52,11 +52,6 @@ void	do_heredoc(t_node *redirect)
 
 void	do_redirect(t_node *redirect)
 {
-	char	*buf;
-
-	buf = malloc(sizeof(char));
-	if (!buf)
-		fatal_error("error");
 	if (!redirect)
 		return ;
 	if (redirect->kind == ND_HEREDOC)

@@ -35,7 +35,7 @@ void	cleanup_redirect(t_node *redirect)
 	}
 }
 
-void	cleanup_node(t_node **node)
+void	cleanup_node(t_node *node)
 {
 	t_node	*cur;
 	t_node	*next;
@@ -43,31 +43,34 @@ void	cleanup_node(t_node **node)
 	t_token	*args;
 	t_token	*tmp;
 
-	cur = *node;
-	while (cur)
+	//cur = *node;
+	while (node)
 	{
-		if (cur->args)
+		if (node->args)
 		{
 			i = -1;
-			while (cur->args->arr && cur->args->arr[++i])
-				free(cur->args->arr[i]);
-			if (cur->args->arr)
-				free(cur->args->arr);
-			if (cur->args->word)
-				free(cur->args->word);
-			if (cur->args->next)
+			while (node->args->arr && node->args->arr[++i])
+				free(node->args->arr[i]);
+			if (node->args->arr)
+				free(node->args->arr);
+			if (node->args->word)
+				free(node->args->word);
+			if (node->args->next)
 			{
-				tmp = cur->args->next;
-				free(cur->args);
-				cur->args = tmp;
+				tmp = node->args->next;
+				free(node->args);
+				node->args = tmp;
 			}
 			else
-				cur->args = NULL;
+				node->args = NULL;
 		}
-		cur = cur->next;
+		cleanup_redirect(node->redirect);
+		cur = node->next;
+		free(node);
+		node = cur;
 	}
 	//cleanup_node_args((*node)->args);
-	cleanup_redirect((*node)->redirect);
+	//cleanup_redirect((*node)->redirect);
 	// while (*node)
 	// {
 	// 	cur = (*node)->next;

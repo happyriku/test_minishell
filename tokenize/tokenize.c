@@ -85,12 +85,12 @@ t_token	*tokenize(char *input)
 		else if (is_word(input))
 			token->next = new_token(filter_word(input, &input), TK_WORD);
 		if (!token->next)
-			return (cleanup_token(&(head.next)), NULL);
+			return (cleanup_token((head.next)), NULL);
 		token = token->next;
 	}
 	token->next = new_token(NULL, TK_EOF);
 	if (!token->next)
-		return (cleanup_token(&(head.next)), NULL);
+		return (cleanup_token((head.next)), NULL);
 	token = token->next;
 	return (head.next);
 }

@@ -13,7 +13,9 @@ void	append_token(t_token **args, t_token *token)
 	}
 	cur = *args;
 	while (cur->next)
+	{
 		cur = cur->next;
+	}
 	cur->next = token;
 }
 

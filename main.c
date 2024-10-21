@@ -27,7 +27,6 @@ int	main(void)
 		}
 		if (*input)
 			add_history(input);
-		printf("input : %s\n", input);
 		res = interpret(input);
 		if (res == EXIT)
 			return (free(input), EXIT_SUCCESS);

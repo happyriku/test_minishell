@@ -22,12 +22,14 @@ int	interpret(char *input)
 	node = parse(token);
 	if (g_info.syntax_error)
 	{
+		//parseの段階ではnode->args->arrが初期化されていないのでclean_nodeでsegvが発生する
 		g_info.syntax_error = false;
 		return (cleanup_token(token), cleanup_node(node), 0);
 	}
 	expand(node);
 	if (g_info.syntax_error)
 	{
+		//expandの段階ではnode->args->arrが初期化されていないのでcleanup_nodeでsegvが発生する
 		g_info.syntax_error = false;
 		return (cleanup_token(token), cleanup_node(node), 0);
 	}

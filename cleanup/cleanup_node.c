@@ -55,6 +55,7 @@ void	cleanup_node(t_node *node)
 				free(node->args->arr);
 			if (node->args->word)
 				free(node->args->word);
+			cleanup_redirect(node->redirect);
 			if (node->args->next)
 			{
 				tmp = node->args->next;
@@ -62,19 +63,12 @@ void	cleanup_node(t_node *node)
 				node->args = tmp;
 			}
 			else
+			{
 				node->args = NULL;
+			}
 		}
-		cleanup_redirect(node->redirect);
-		cur = node->next;
-		free(node);
-		node = cur;
+		break ;
 	}
-	//cleanup_node_args((*node)->args);
-	//cleanup_redirect((*node)->redirect);
-	// while (*node)
-	// {
-	// 	cur = (*node)->next;
-	// 	free(*node);
-	// 	*node = cur;
-	// }
+		// if (node->next)
+		// 	node = node->next;
 }

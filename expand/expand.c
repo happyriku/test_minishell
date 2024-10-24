@@ -6,6 +6,7 @@ void	append_char(char **new_word, char word)
 	size_t	len;
 
 	len = strlen(*new_word) + 2;
+	printf("len : %zu\n", len);
 	memory = (char *)malloc(sizeof(char) * (len));
 	if (!memory)
 		return ;
@@ -16,26 +17,25 @@ void	append_char(char **new_word, char word)
 	*new_word = memory;
 }
 
-// bool	is_closed_quote(char *word)
-// {
-// 	int	single_quote_count;
-// 	int	double_quote_count;
+bool	is_closed_quote(char *word)
+{
+	int	single_quote_count;
+	int	double_quote_count;
 
-// 	//printf("word : %s\n", word);
-// 	single_quote_count = 0;
-// 	double_quote_count = 0;
-// 	while (*word)
-// 	{
-// 		if (*word == SINGLEQUOTE)
-// 			single_quote_count++;
-// 		if (*word == DOUBLEQUOTE)
-// 			double_quote_count++;
-// 		word++;
-// 	}
-// 	if (single_quote_count % 2 != 0 || double_quote_count % 2 != 0)
-// 		return (false);
-// 	return (true);
-// }
+	single_quote_count = 0;
+	double_quote_count = 0;
+	while (*word)
+	{
+		if (*word == SINGLEQUOTE)
+			single_quote_count++;
+		if (*word == DOUBLEQUOTE)
+			double_quote_count++;
+		word++;
+	}
+	if (single_quote_count % 2 != 0 || double_quote_count % 2 != 0)
+		return (false);
+	return (true);
+}
 
 void	syntax_error(void)
 {
@@ -53,16 +53,20 @@ void	syntax_error(void)
 // 	if (!is_closed_quote(args->word))
 // 		syntax_error();
 // 	word = &(args->word);
-// 	new_word = NULL;
+// 	new_word = calloc(1, sizeof(char));
+// 	if (!new_word)
+// 		fatal_error("malloc");
 // 	while (**word && !is_metacharacter(**word))
 // 	{
 // 		if (**word != SINGLEQUOTE && **word != DOUBLEQUOTE)
 // 			append_char(&new_word, **word);
 // 		(*word)++;
 // 	}
+// 	free(args->word);
 // 	args->word = new_word;
 // 	quote_removal(args->next);
 // }
+
 
 bool	is_alpha_under(char c)
 {
@@ -78,18 +82,33 @@ bool	handle_double_quote(char **new_word, char **rest, char *p)
 {
 	char	*path;
 
-	if (!is_variable(++p))
-		return (false);
 	p++;
 	while (*p && *p != DOUBLEQUOTE)
+	{
+		if (is_variable(p))
+			p++;
 		append_char(new_word, *(p++));
+	}
 	if (*p == '\0')
 		syntax_error();
-	if (*p == SINGLEQUOTE)
-		p++;
 	printf("new_word : %s\n", *new_word);
 	path = getenv(*new_word);
 	printf("path : %s\n", path);
+	*rest = p;
+}
+
+void	handle_single_quote(char **new_word, char **rest, char *p)
+{
+	p++;
+	while (*p && *p != SINGLEQUOTE)
+		append_char(new_word, *(p++));
+	if (*p == '\0')
+	{
+		printf("new_word : %s\n", *new_word);
+		syntax_error();
+	}
+	if (*p == SINGLEQUOTE)
+		p++;
 	*rest = p;
 }
 
@@ -103,19 +122,15 @@ void	expand_variable(t_token *args)
 	p = args->word;
 	new_word = calloc(1, sizeof(char));
 	if (!new_word)
-		return ;
+		fatal_error("malloc");
 	while (*p && !is_metacharacter(*p))
 	{
 		if (*p == SINGLEQUOTE)
-			return ;
-		 else if (*p == DOUBLEQUOTE)
-		 	if (!handle_double_quote(&new_word, &p, p))
-				return ;
-		// else if (is_variable(*p))
-		// 	handle_variable(&new_word, &p, p);
+			handle_single_quote(&new_word, &p, p);
+		else if (*p == DOUBLEQUOTE)
+			handle_double_quote(&new_word, &p, p);
 		else
-			append_char(&new_word, *p);
-		p++;
+			append_char(&new_word, *(p++));
 	}
 	free(args->word);
 	args->word = new_word;

@@ -1,24 +1,5 @@
 #include "../include/minishell.h"
 
-void	cleanup_node_args(t_token *args)
-{
-	t_token	*cur;
-
-	if (!(args))
-		return ;
-	while (args)
-	{
-		if (!(args)->next)
-		{
-			free(args);
-			return ;
-		}
-		cur = (args)->next;
-		free(args);
-		args = cur;
-	}
-}
-
 void	cleanup_redirect(t_node *redirect)
 {
 	t_node	*cur;
@@ -27,11 +8,45 @@ void	cleanup_redirect(t_node *redirect)
 		return ;
 	while (redirect)
 	{
+		if (redirect->filename)
+			free(redirect->filename);
+		if (redirect->delimiter)
+			free(redirect->delimiter);
 		if (!redirect->next)
 			return ;
 		cur = redirect->next;
 		free(redirect);
 		redirect = cur;
+	}
+}
+
+void	cleanup_node_args(t_token *args)
+{
+	int	i;
+	t_token	*tmp;
+
+	i = -1;
+	if (!args)
+		return ;
+	while (args)
+	{
+		while (args->arr && args->arr[++i])
+			free(args->arr[i]);
+		if (args->arr)
+			free(args->arr);
+		if (args->word)
+			free(args->word);
+		if (args->next)
+		{
+			tmp = args->next;
+			free(args);
+			args = tmp;
+		}
+		if (!args->next)
+		{
+			args = NULL;
+			break ;
+		}
 	}
 }
 
@@ -43,32 +58,10 @@ void	cleanup_node(t_node *node)
 	t_token	*args;
 	t_token	*tmp;
 
-	//cur = *node;
-	while (node)
-	{
-		if (node->args)
-		{
-			i = -1;
-			while (node->args->arr && node->args->arr[++i])
-				free(node->args->arr[i]);
-			if (node->args->arr)
-				free(node->args->arr);
-			if (node->args->word)
-				free(node->args->word);
-			cleanup_redirect(node->redirect);
-			if (node->args->next)
-			{
-				tmp = node->args->next;
-				free(node->args);
-				node->args = tmp;
-			}
-			else
-			{
-				node->args = NULL;
-			}
-		}
-		break ;
-	}
-		// if (node->next)
-		// 	node = node->next;
+	if (!node)
+		return ;
+	cleanup_node_args(node->args);
+	cleanup_node(node->redirect);
+	cleanup_node(node->next);
+	free(node);
 }

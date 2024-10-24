@@ -105,6 +105,7 @@ char	*ft_strndup(const char *s1, size_t n);
 char	*ft_strncpy(char *dst, char *src, int n);
 int		ft_lstsize(t_token *lst);
 size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
+int		ft_isalpha(int c);
 
 //parse
 t_node	*parse(t_token *token);

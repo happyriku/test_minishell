@@ -24,25 +24,24 @@ int	interpret(char *input)
 	{
 		//parseの段階ではnode->args->arrが初期化されていないのでclean_nodeでsegvが発生する
 		g_info.syntax_error = false;
-		return (cleanup_token(token), cleanup_node(node), 0);
+		return (cleanup_token(token), 0);
 	}
 	expand(node);
 	if (g_info.syntax_error)
 	{
 		//expandの段階ではnode->args->arrが初期化されていないのでcleanup_nodeでsegvが発生する
 		g_info.syntax_error = false;
-		return (cleanup_token(token), cleanup_node(node), 0);
+		return (cleanup_token(token), 0);
 	}
 	res = exec(node);
 	if (res == MALLOC_ERROR)
-		return (cleanup_token(token), cleanup_node(node), 1);
+		return (cleanup_node(node), 1);
 	else if (res == -1)
-		return (cleanup_token(token), cleanup_node(node), EXIT);
+		return (cleanup_node(node), EXIT);
 	else if (res == 0)
-		return (cleanup_token(token), cleanup_node(node), 0);
+		return (cleanup_node(node), 0);
 	else if (res == 1)
 	{
-		cleanup_token(token);
 		cleanup_node(node);
 		exit(0);
 	}

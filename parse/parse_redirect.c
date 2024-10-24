@@ -21,6 +21,7 @@ t_node	*redirect_node(t_token **rest, char *word, t_node_kind kind)
 	if (!redirect)
 		return (NULL);
 	redirect->filename = strdup(word);
+	redirect->delimiter = NULL;
 	redirect->next = NULL;
 	redirect->kind = kind;
 	redirect->std_fd = get_std_fd((*rest)->word);
@@ -36,6 +37,7 @@ t_node	*heredoc_node(t_token **rest, char *word, t_node_kind kind)
 	if (!redirect)
 		return (NULL);
 	redirect->delimiter = word;
+	redirect->filename = NULL;
 	redirect->next = NULL;
 	redirect->kind = kind;
 	redirect->std_fd = get_std_fd((*rest)->word);

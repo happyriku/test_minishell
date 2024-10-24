@@ -31,7 +31,7 @@ int	interpret(char *input)
 	{
 		//expandの段階ではnode->args->arrが初期化されていないのでcleanup_nodeでsegvが発生する
 		g_info.syntax_error = false;
-		return (cleanup_token(token), 0);
+		return (0);
 	}
 	res = exec(node);
 	if (res == MALLOC_ERROR)

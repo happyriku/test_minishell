@@ -6,7 +6,6 @@ void	append_char(char **new_word, char word)
 	size_t	len;
 
 	len = strlen(*new_word) + 2;
-	printf("len : %zu\n", len);
 	memory = (char *)malloc(sizeof(char) * (len));
 	if (!memory)
 		return ;
@@ -91,9 +90,10 @@ bool	handle_double_quote(char **new_word, char **rest, char *p)
 	}
 	if (*p == '\0')
 		syntax_error();
-	printf("new_word : %s\n", *new_word);
-	path = getenv(*new_word);
-	printf("path : %s\n", path);
+	if (*p == DOUBLEQUOTE)
+		p++;
+	// path = getenv(*new_word);
+	// printf("path : %s\n", path);
 	*rest = p;
 }
 
@@ -103,10 +103,7 @@ void	handle_single_quote(char **new_word, char **rest, char *p)
 	while (*p && *p != SINGLEQUOTE)
 		append_char(new_word, *(p++));
 	if (*p == '\0')
-	{
-		printf("new_word : %s\n", *new_word);
 		syntax_error();
-	}
 	if (*p == SINGLEQUOTE)
 		p++;
 	*rest = p;

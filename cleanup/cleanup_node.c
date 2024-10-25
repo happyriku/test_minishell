@@ -37,7 +37,7 @@ void	cleanup_node_args(t_token *args)
 			free(args);
 			args = tmp;
 		}
-		else if (!args->word)
+		else if (!args->next)
 		{
 			free(args);
 			args = NULL;

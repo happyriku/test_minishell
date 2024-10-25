@@ -66,11 +66,12 @@ void	reset_redirect(t_node *redirect)
 	close(redirect->stash_fd);
 }
 
-bool	is_builtin(char **arg)
+bool	is_builtin(t_token *token)
 {
-	if (strcmp(arg[0], "echo") == 0 && arg[1] != NULL)
+	
+	if (strcmp(token->word, "echo") == 0)
 		return (true);
-	else if (strcmp(arg[0], "exit") == 0)
+	else if (strcmp(token->word, "exit") == 0)
 		return (true);
 	else
 		return (false);
@@ -92,7 +93,7 @@ int	exec_command(t_node *node, int in_fd)
 		prepare_child_pipe(node, in_fd);
 		if (node->redirect)
 			do_redirect(node->redirect);
-		if (is_builtin(node->args->arr))
+		if (is_builtin(node->args))
 		{
 			exec_builtin(node);
 			if (node->redirect)

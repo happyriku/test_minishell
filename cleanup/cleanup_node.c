@@ -20,20 +20,6 @@ void	cleanup_redirect(t_node *redirect)
 	}
 }
 
-	// if (args->word)
-		// {
-		// 	free(args->word);
-		// 	tmp = args->next;
-		// 	free(args);
-		// 	args = tmp;
-		// }
-		// else if (!args->next)
-		// {
-		// 	free(args);
-		// 	args = NULL;
-		// 	break ;
-		// }
-
 void	cleanup_node_args(t_token *args)
 {
 	int	i;
@@ -42,17 +28,22 @@ void	cleanup_node_args(t_token *args)
 	i = -1;
 	if (!args)
 		return ;
+	printf("args->word : %s\n", args->word);
+	printf("args->next->word : %s\n", args->next->word);
+	printf("args->next->next->word : %s\n", args->next->next->word);
 	while (args)
 	{
  		if (args->word)
 		{
 		 	free(args->word);
 		 	tmp = args->next;
+			printf("=========\n");
 		 	free(args);
 		 	args = tmp;
 		}
-		else if (!args->next)
+		else if (!args->word)
 		{
+			printf("-------\n");
 		 	free(args);
 		 	args = NULL;
 		 	break ;

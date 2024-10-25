@@ -53,7 +53,6 @@ typedef struct s_token
 	struct s_token	*next;
 	char			*word;
 	//execve
-	char			**arr;
 	int				pid;
 }	t_token;
 

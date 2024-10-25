@@ -20,6 +20,20 @@ void	cleanup_redirect(t_node *redirect)
 	}
 }
 
+	// if (args->word)
+		// {
+		// 	free(args->word);
+		// 	tmp = args->next;
+		// 	free(args);
+		// 	args = tmp;
+		// }
+		// else if (!args->next)
+		// {
+		// 	free(args);
+		// 	args = NULL;
+		// 	break ;
+		// }
+
 void	cleanup_node_args(t_token *args)
 {
 	int	i;
@@ -30,18 +44,18 @@ void	cleanup_node_args(t_token *args)
 		return ;
 	while (args)
 	{
-		if (args->word)
+ 		if (args->word)
 		{
-			free(args->word);
-			tmp = args->next;
-			free(args);
-			args = tmp;
+		 	free(args->word);
+		 	tmp = args->next;
+		 	free(args);
+		 	args = tmp;
 		}
 		else if (!args->next)
 		{
-			free(args);
-			args = NULL;
-			break ;
+		 	free(args);
+		 	args = NULL;
+		 	break ;
 		}
 	}
 }
@@ -58,7 +72,7 @@ void	cleanup_node(t_node *node)
 	if (!node)
 		return ;
 	cleanup_node_args(node->args);
-	cleanup_node(node->redirect);
+	cleanup_redirect(node->redirect);
 	cleanup_node(node->next);
 	free(node);
 }

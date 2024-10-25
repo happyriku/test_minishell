@@ -2,6 +2,45 @@
 
 extern	char	**environ;
 
+int	get_size(t_token *args)
+{
+	t_token	*tmp;
+	int		count;
+
+	tmp = args;
+	count = 0;
+	while (tmp && tmp->kind != TK_EOF)
+	{
+		tmp = tmp->next;
+		count++;
+	}
+	return (count);
+}
+
+char	**create_args(t_token *token)
+{
+	char	**args;
+	size_t	len;
+	int		size;
+	int		i;
+
+	size = get_size(token);
+	args = (char **)malloc(sizeof(char *) * (size + 1));
+	if (!args)
+		fatal_error("mallo");
+	i = -1;
+	while (token && token->kind != TK_EOF)
+	{
+		args[++i] = (char *)malloc(sizeof(char) * strlen(token->word) + 1);
+		if (!args)
+			fatal_error("malloc");
+		ft_strncpy(args[i], token->word, strlen(token->word) + 1);
+		token = token->next;
+	}
+	args[++i] = NULL;
+	return (args);
+}
+
 char	*search_path(char *input)
 {
 	char	*value;
@@ -38,23 +77,28 @@ char	*search_path(char *input)
 void	exec_nonbuiltin(t_node *node)
 {
 	char	*path;
-
-	path = search_path(node->args->arr[0]);
+	char	**args;
+	
+	args = create_args(node->args);
+	path = search_path(args[0]);
 	if (!path)
 	{	
-		if (!strchr(node->args->arr[0], '/'))
+		if (!strchr(args[0], '/'))
 		{
-			printf("%s: command not found\n", node->args->arr[0]);
+			printf("%s: command not found\n", args[0]);
 			return ;
 		}
-		path = node->args->arr[0];
+		path = args[0];
 	}
-	if (execve(path, node->args->arr, environ) == -1)
+	if (execve(path, args, environ) == -1)
 		exit(EXIT_SUCCESS); //free(path) deleteしました
 }
 
 void	exec_builtin(t_node *node)
 {
-	if (strcmp(node->args->arr[0], "echo") == 0)
-		exec_echo(node->args->arr, node);
+	char	**args;
+	
+	args = create_args(node->args);
+	if (strcmp(args[0], "echo") == 0)
+		exec_echo(args, node);
 }

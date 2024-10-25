@@ -5,7 +5,10 @@ void	append_char(char **new_word, char word)
 	char	*memory;
 	size_t	len;
 
-	len = strlen(*new_word) + 2;
+	if (*new_word == NULL)
+		len = 2;
+	else
+		len = strlen(*new_word) + 2;
 	memory = (char *)malloc(sizeof(char) * (len));
 	if (!memory)
 		return ;
@@ -109,6 +112,24 @@ void	handle_single_quote(char **new_word, char **rest, char *p)
 	*rest = p;
 }
 
+void	handle_variable(char **new_word, char **rest, char *p)
+{
+	char	*str;
+
+	str = calloc(1, sizeof(char));
+	if (!str)
+		fatal_error("malloc");
+	while (*p)
+	{
+		if (*p == '$')
+			p++;
+		append_char(&str, *p);
+		p++;
+	}
+	*new_word = getenv(str);
+	*rest = p;
+}
+
 void	expand_variable(t_token *args)
 {
 	char	*new_word;
@@ -126,6 +147,8 @@ void	expand_variable(t_token *args)
 			handle_single_quote(&new_word, &p, p);
 		else if (*p == DOUBLEQUOTE)
 			handle_double_quote(&new_word, &p, p);
+		else if (is_variable(p))
+			handle_variable(&new_word, &p, p);
 		else
 			append_char(&new_word, *(p++));
 	}

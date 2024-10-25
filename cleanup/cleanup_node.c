@@ -30,25 +30,22 @@ void	cleanup_node_args(t_token *args)
 		return ;
 	while (args)
 	{
-		while (args->arr && args->arr[++i])
-			free(args->arr[i]);
-		if (args->arr)
-			free(args->arr);
 		if (args->word)
-			free(args->word);
-		if (args->next)
 		{
+			free(args->word);
 			tmp = args->next;
 			free(args);
 			args = tmp;
 		}
-		if (!args->next)
+		else if (!args->word)
 		{
+			free(args);
 			args = NULL;
 			break ;
 		}
 	}
 }
+
 
 void	cleanup_node(t_node *node)
 {

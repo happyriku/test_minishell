@@ -33,20 +33,7 @@ void	append_argv(t_token **args)
 
 int	exec(t_node *node)
 {
-	char	**argv;
-	pid_t	pid;
-	char	*path;
-	int		i;
-	int		status;
-    t_node *cur;
-
-    cur = node;
-    while (cur)
-    {
-        append_argv(&cur->args);
-        cur = cur->next;
-    }
-	if (strncmp(node->args->arr[0], "exit", 4) == 0)
+	if (strncmp(node->args->word, "exit", 4) == 0)
 		return (printf("exit\n"), -1);
 	return (exec_command(node, STDIN_FILENO));
 }

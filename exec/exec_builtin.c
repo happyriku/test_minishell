@@ -79,6 +79,8 @@ void	exec_nonbuiltin(t_node *node)
 	char	*path;
 	char	**args;
 	
+	if (node->redirect)
+		do_redirect(node->redirect);
 	args = create_args(node->args);
 	path = search_path(args[0]);
 	if (!path)
@@ -86,7 +88,7 @@ void	exec_nonbuiltin(t_node *node)
 		if (!strchr(args[0], '/'))
 		{
 			printf("%s: command not found\n", args[0]);
-			return ;
+			exit(127);
 		}
 		path = args[0];
 	}
@@ -94,11 +96,26 @@ void	exec_nonbuiltin(t_node *node)
 		exit(EXIT_SUCCESS); //free(path) deleteしました
 }
 
-void	exec_builtin(t_node *node)
+int	exec_exit(t_node *node)
+{
+	printf("exit\n");
+	g_info.last_status = 0;
+	exit(g_info.last_status);
+}
+
+int	exec_builtin(t_node *node)
 {
 	char	**args;
-	
+	int		status;
+
+	if (node->redirect)
+		do_redirect(node->redirect);
 	args = create_args(node->args);
 	if (strcmp(args[0], "echo") == 0)
-		exec_echo(args, node);
+		status = exec_echo(args, node);
+	else if (strcmp(args[0], "exit") == 0)
+		status = exec_exit(node);
+	if (node->redirect)
+		reset_redirect(node->redirect);
+	return (status);
 }

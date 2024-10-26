@@ -96,8 +96,7 @@ int	wait_pid(void)
 
 	if (wait(&wstatus) == -1)
 		fatal_error("wait");
-	if (WIFEXITED(wstatus))
-		status = WEXITSTATUS(wstatus);
+	status = WEXITSTATUS(wstatus);
 	return (status);
 }
 
@@ -116,15 +115,8 @@ int	exec_command(t_node *node, int in_fd)
 	else if (pid == 0)
 	{
 		prepare_child_pipe(node, in_fd);
-		if (node->redirect)
-			do_redirect(node->redirect);
 		if (is_builtin(node->args))
-		{
-			exec_builtin(node);
-			if (node->redirect)
-				reset_redirect(node->redirect);
-			exit(EXIT_SUCCESS);
-		}
+			exit(exec_builtin(node));
 		else
 		{
 			exec_nonbuiltin(node);

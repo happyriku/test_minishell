@@ -6,7 +6,6 @@
 
 # define PATH_MAX 260
 
-# define EXIT -1
 # define MALLOC_ERROR -2
 
 # define SINGLEQUOTE 39
@@ -78,14 +77,15 @@ typedef struct s_node
 
 typedef struct s_info
 {
-	bool	syntax_error;
-	bool	fatal_error;
+	bool			syntax_error;
+	bool			fatal_error;
+	unsigned int	last_status;
 
 }	t_info;
 
 extern t_info g_info;
 
-int		interpret(char *input);
+int		interpret(char *input, int *last_status);
 void	cleanup_token(t_token *token);
 void	cleanup_node(t_node *node);
 
@@ -101,7 +101,9 @@ bool	is_ctrlop(char	*str);
 void	expand(t_node *node);
 void	expand_variable(t_token *args);
 bool	is_variable(char *word);
+bool	is_special_parameter(char *word);
 void	syntax_error(void);
+void	reset_redirect(t_node *redirect);
 
 //utils                   *minishellが完成したらlibftの方を用いる
 char	*ft_strndup(const char *s1, size_t n);
@@ -121,12 +123,13 @@ t_token	*tokdup(t_token *token);
 
 //exec
 int		exec(t_node *node);
-void	exec_echo(char **argv, t_node *node);
-void	exec_builtin(t_node *node);
+int		exec_echo(char **argv, t_node *node);
+int		exec_builtin(t_node *node);
 void	exec_nonbuiltin(t_node *node);
 void	do_redirect(t_node *redirect);
 void	do_heredoc(t_node *redirect);
 int		exec_command(t_node *node, int in_fd);
+bool	is_builtin(t_token *token);
 
 char	*search_path(char *input);
 

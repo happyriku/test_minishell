@@ -89,6 +89,24 @@ void	handle_variable(char **new_word, char **rest, char *p)
 	*rest = p;
 }
 
+void	append_num(char **new_word, unsigned int num)
+{
+	if (num >= 0 && num <= 9)
+	{
+		append_char(new_word, num + '0');
+		return ;
+	}
+	append_num(new_word, num / 10);
+	append_char(new_word, (num % 10) + '0');
+}
+
+void	handle_special_parameter(char **new_word, char **rest, char *p)
+{
+	p += 2;
+	append_num(new_word, g_info.last_status);
+	*rest = p;
+}
+
 void	expand_variable(t_token *args)
 {
 	char	*new_word;
@@ -106,6 +124,8 @@ void	expand_variable(t_token *args)
 			handle_single_quote(&new_word, &p, p);
 		else if (*p == DOUBLEQUOTE)
 			handle_double_quote(&new_word, &p, p);
+		else if (is_special_parameter(p))
+			handle_special_parameter(&new_word, &p, p);
 		else if (is_variable(p))
 			handle_variable(&new_word, &p, p);
 		else

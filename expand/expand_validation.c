@@ -9,3 +9,8 @@ bool	is_variable(char *word)
 {
 	return (*word == '$' && is_alpha_under(*(word + 1)));
 }
+
+bool	is_special_parameter(char *word)
+{
+	return (*word == '$' && *(word + 1) == '?');
+}

@@ -27,8 +27,8 @@ int	main(void)
 		}
 		if (*input)
 			add_history(input);
-		res = interpret(input);
-		if (res == EXIT)
+		res = interpret(input, &g_info.last_status);
+		if (res == -1)
 			return (free(input), EXIT_SUCCESS);
 		if (res != 0)
 		{

@@ -3,7 +3,7 @@
 extern char	**environ;
 t_info g_info = {};
 
-int	interpret(char *input)
+int	interpret(char *input, int *last_status)
 {
 	int		status;
 	char	*path;
@@ -33,16 +33,11 @@ int	interpret(char *input)
 		g_info.syntax_error = false;
 		return (0);
 	}
-	res = exec(node);
-	if (res == MALLOC_ERROR)
-		return (cleanup_node(node), 1);
-	else if (res == -1)
-		return (cleanup_node(node), EXIT);
-	else if (res == 0)
-		return (cleanup_node(node), 0);
-	else if (res == 1)
-	{
-		cleanup_node(node);
-		exit(0);
-	}
+	*last_status = exec(node);
+	return (cleanup_node(node), 0);
+	// else if (res == 1)
+	// {
+	// 	cleanup_node(node);
+	// 	exit(0);
+	// }
 }

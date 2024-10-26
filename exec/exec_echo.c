@@ -1,6 +1,6 @@
 #include "../include/minishell.h"
 
-void	exec_echo(char **argv, t_node *node)
+int	exec_echo(char **argv, t_node *node)
 {
 	int	i;
 
@@ -12,5 +12,5 @@ void	exec_echo(char **argv, t_node *node)
 			write(STDOUT_FILENO, " ", 1);
 	}
 	printf("\n");
-	// return (free(argv), 1);
+	return (0);
 }

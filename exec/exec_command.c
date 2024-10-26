@@ -77,10 +77,23 @@ bool	is_builtin(t_token *token)
 		return (false);
 }
 
+void	prepare_parent_pipe(t_node *node, int in_fd)
+{
+	if (node->redirect && node->redirect->kind == ND_HEREDOC)
+	{
+		close(node->redirect->pipefd[0]);
+		close(node->redirect->pipefd[1]);
+	}
+	close(node->pfd[1]);
+	if (in_fd != STDIN_FILENO)
+		close(in_fd);
+}
+
 int	exec_command(t_node *node, int in_fd)
 {
 	int		pid;
 	char	*path;
+	int		wstatus;
 	int		status;
 
 	if (pipe(node->pfd) == -1)
@@ -108,21 +121,14 @@ int	exec_command(t_node *node, int in_fd)
 	}
 	else
 	{
-		if (node->redirect && node->redirect->kind == ND_HEREDOC)
-		{
-			close(node->redirect->pipefd[0]);
-			close(node->redirect->pipefd[1]);
-		}
-		close(node->pfd[1]);
-		if (in_fd != STDIN_FILENO)
-			close(in_fd);
+		prepare_parent_pipe(node, in_fd);
 		if (node->next)
 			exec_command(node->next, node->pfd[0]);
 		else
 			close(node->pfd[0]);
-		if (wait(&status) == -1)
+		if (wait(&wstatus) == -1)
 			fatal_error("wait");
-		return (!WIFEXITED(status));
+		return (!WIFEXITED(wstatus));
 	}
 	return (0);
 }

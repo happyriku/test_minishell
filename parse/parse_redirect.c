@@ -36,7 +36,7 @@ t_node	*heredoc_node(t_token **rest, char *word, t_node_kind kind)
 	redirect = malloc(sizeof(t_node));
 	if (!redirect)
 		return (NULL);
-	redirect->delimiter = word;
+	redirect->delimiter = remove_quote(word);
 	redirect->filename = NULL;
 	redirect->next = NULL;
 	redirect->kind = kind;

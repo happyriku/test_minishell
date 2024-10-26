@@ -104,6 +104,8 @@ bool	is_variable(char *word);
 bool	is_special_parameter(char *word);
 void	syntax_error(void);
 void	reset_redirect(t_node *redirect);
+char	*remove_quote(char *word);
+void	append_char(char **new_word, char word);
 
 //utils                   *minishellが完成したらlibftの方を用いる
 char	*ft_strndup(const char *s1, size_t n);

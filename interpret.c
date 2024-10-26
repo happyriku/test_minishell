@@ -27,6 +27,12 @@ int	interpret(char *input, int *last_status)
 		return (cleanup_token(token), 0);
 	}
 	expand(node);
+	tmp = node->args;
+	while (tmp)
+	{
+		printf("tmp->word : %s\n", tmp->word);
+		tmp = tmp->next;
+	}
 	if (g_info.syntax_error)
 	{
 		//expandの段階ではnode->args->arrが初期化されていないのでcleanup_nodeでsegvが発生する

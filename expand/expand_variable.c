@@ -1,5 +1,23 @@
 #include "../include/minishell.h"
 
+char	*remove_quote(char *word)
+{
+	char	*new_word;
+
+	new_word = calloc(sizeof(char), 1);
+	if (!new_word)
+		fatal_error("malloc");
+	if (*word == SINGLEQUOTE || *word == DOUBLEQUOTE)
+		word++;
+	while (*word && *word != SINGLEQUOTE && *word != DOUBLEQUOTE)
+	{
+		append_char(&new_word, *word);
+		word++;
+	}
+	return (new_word);
+
+}
+
 void	append_char(char **new_word, char word)
 {
 	char	*memory;

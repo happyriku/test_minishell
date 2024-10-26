@@ -89,6 +89,18 @@ void	prepare_parent_pipe(t_node *node, int in_fd)
 		close(in_fd);
 }
 
+int	wait_pid(void)
+{
+	int	wstatus;
+	int	status;
+
+	if (wait(&wstatus) == -1)
+		fatal_error("wait");
+	if (WIFEXITED(wstatus))
+		status = WEXITSTATUS(wstatus);
+	return (status);
+}
+
 int	exec_command(t_node *node, int in_fd)
 {
 	int		pid;
@@ -126,9 +138,6 @@ int	exec_command(t_node *node, int in_fd)
 			exec_command(node->next, node->pfd[0]);
 		else
 			close(node->pfd[0]);
-		if (wait(&wstatus) == -1)
-			fatal_error("wait");
-		return (!WIFEXITED(wstatus));
+		return (wait_pid());
 	}
-	return (0);
 }

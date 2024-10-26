@@ -111,6 +111,7 @@ void	handle_single_quote(char **new_word, char **rest, char *p)
 		p++;
 	*rest = p;
 }
+#include <string.h>
 
 void	handle_variable(char **new_word, char **rest, char *p)
 {
@@ -126,7 +127,7 @@ void	handle_variable(char **new_word, char **rest, char *p)
 		append_char(&str, *p);
 		p++;
 	}
-	*new_word = getenv(str);
+	*new_word = strdup(getenv(str));
 	*rest = p;
 }
 

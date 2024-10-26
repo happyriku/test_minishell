@@ -80,23 +80,38 @@ bool	is_variable(char *word)
 	return (*word == '$' && is_alpha_under(*(word + 1)));
 }
 
+char	*get_path(char *word)
+{
+	char	*path;
+
+	path = strdup(getenv(word));
+	if (!path)
+		return (NULL);
+	free(word);
+	return (path);
+}
+
 bool	handle_double_quote(char **new_word, char **rest, char *p)
 {
 	char	*path;
+	bool	var_flag;
 
 	p++;
 	while (*p && *p != DOUBLEQUOTE)
 	{
 		if (is_variable(p))
+		{
+			var_flag = true;
 			p++;
+		}
 		append_char(new_word, *(p++));
 	}
 	if (*p == '\0')
 		syntax_error();
 	if (*p == DOUBLEQUOTE)
 		p++;
-	// path = getenv(*new_word);
-	// printf("path : %s\n", path);
+	if (var_flag)
+		*new_word = get_path(*new_word);
 	*rest = p;
 }
 
@@ -111,7 +126,6 @@ void	handle_single_quote(char **new_word, char **rest, char *p)
 		p++;
 	*rest = p;
 }
-#include <string.h>
 
 void	handle_variable(char **new_word, char **rest, char *p)
 {
@@ -120,14 +134,19 @@ void	handle_variable(char **new_word, char **rest, char *p)
 	str = calloc(1, sizeof(char));
 	if (!str)
 		fatal_error("malloc");
-	while (*p)
+	while (*p && *p != SINGLEQUOTE && *p != DOUBLEQUOTE)
 	{
 		if (*p == '$')
 			p++;
-		append_char(&str, *p);
-		p++;
+		append_char(&str, *(p++));
 	}
-	*new_word = strdup(getenv(str));
+	if (*p == SINGLEQUOTE || *p == DOUBLEQUOTE)
+	{
+		p++;
+		syntax_error();
+	}
+	else
+		*new_word = get_path(str);
 	*rest = p;
 }
 

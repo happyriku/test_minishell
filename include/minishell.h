@@ -99,6 +99,9 @@ bool	is_ctrlop(char	*str);
 
 //expand
 void	expand(t_node *node);
+void	expand_variable(t_token *args);
+bool	is_variable(char *word);
+void	syntax_error(void);
 
 //utils                   *minishellが完成したらlibftの方を用いる
 char	*ft_strndup(const char *s1, size_t n);

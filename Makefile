@@ -9,6 +9,8 @@ SRCS = main.c \
 		tokenize/new_token.c \
 		tokenize/validation.c \
 		expand/expand.c \
+		expand/expand_variable.c \
+		expand/expand_validation.c \
 		parse/parse.c \
 		parse/parse_redirect.c \
 		parse/append.c \

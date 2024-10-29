@@ -19,6 +19,7 @@ int	main(void)
 
 	while (1)
 	{
+		setup_signal();
 		input = readline("minishell> ");
 		if (!input)
 		{

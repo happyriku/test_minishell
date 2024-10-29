@@ -80,6 +80,7 @@ typedef struct s_info
 	bool			syntax_error;
 	bool			fatal_error;
 	unsigned int	last_status;
+	volatile sig_atomic_t signal;
 
 }	t_info;
 
@@ -134,6 +135,9 @@ int		exec_command(t_node *node, int in_fd);
 bool	is_builtin(t_token *token);
 
 char	*search_path(char *input);
+
+//signal
+void	setup_signal(void);
 
 //error
 void	fatal_error(char *msg);

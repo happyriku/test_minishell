@@ -139,6 +139,9 @@ char	*search_path(char *input);
 //signal
 void	setup_signal(void);
 void	reset_signals(void);
+void	reset_signal(int signum);
+void	handler_sigquit(int signum);
+void	handle_sigint(int signum);
 
 //error
 void	fatal_error(char *msg);

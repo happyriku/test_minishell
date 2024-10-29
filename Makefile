@@ -20,6 +20,7 @@ SRCS = main.c \
 		exec/exec_command.c \
 		exec/exec_builtin.c \
 		signal/signal.c \
+		signal/signal_handling.c \
 
 OBJS = $(SRCS:.c=.o)
 

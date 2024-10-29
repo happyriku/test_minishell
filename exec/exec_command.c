@@ -114,6 +114,7 @@ int	exec_command(t_node *node, int in_fd)
 		return (-1);
 	else if (pid == 0)
 	{
+		reset_signals();
 		prepare_child_pipe(node, in_fd);
 		if (is_builtin(node->args))
 			exit(exec_builtin(node));

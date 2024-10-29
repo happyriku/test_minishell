@@ -138,6 +138,7 @@ char	*search_path(char *input);
 
 //signal
 void	setup_signal(void);
+void	reset_signals(void);
 
 //error
 void	fatal_error(char *msg);

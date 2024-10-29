@@ -17,9 +17,9 @@ int	main(void)
 	char	*input;
 	int		res;
 
+	setup_signal();
 	while (1)
 	{
-		setup_signal();
 		input = readline("minishell> ");
 		if (!input)
 		{

@@ -40,6 +40,16 @@ bool	is_builtin(t_token *token)
 		return (true);
 	else if (strcmp(token->word, "exit") == 0)
 		return (true);
+	else if (strcmp(token->word, "cd") == 0)
+		return (true);
+	else if (strcmp(token->word, "pwd") == 0)
+		return (true);
+	else if (strcmp(token->word, "export") == 0)
+		return (true);
+	else if (strcmp(token->word, "unset") == 0)
+		return (true);
+	else if (strcmp(token->word, "env") == 0)
+		return (true);
 	else
 		return (false);
 }

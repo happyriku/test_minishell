@@ -36,7 +36,7 @@ void	do_heredoc(t_node *redirect)
 	while (1)
 	{
 		line = readline(">");
-		if (!line || strcmp(line, redirect->delimiter) == 0 || g_info.readline_interrupted == true)
+		if (!line || strcmp(line, redirect->delimiter) == 0)
 		{
 			if (line)
 				free(line);

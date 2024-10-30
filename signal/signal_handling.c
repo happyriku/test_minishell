@@ -3,10 +3,7 @@
 void	signal_handler(int signum)
 {
 	if (signum == SIGINT)
-	{
 		g_info.signal = SIGINT;
-		rl_done = 1;
-	}
 	return ;
 }
 

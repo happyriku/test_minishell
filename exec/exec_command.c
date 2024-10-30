@@ -63,13 +63,15 @@ int	wait_pid(void)
 	pid_t	res;
 
 	res = wait(&wstatus);
-	printf("res : %d\n", res);
 	if (res < 0)
 	{
-		if (errno != EINTR && errno != ECHILD)
+		if (errno == EINTR)
+			status = 130;
+		else
 			fatal_error("wait");
 	}
-	status = WEXITSTATUS(wstatus);
+	else
+		status = WEXITSTATUS(wstatus);
 	return (status);
 }
 

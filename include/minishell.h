@@ -25,6 +25,7 @@
 # include <signal.h>
 # include <fcntl.h>
 # include <errno.h>
+# include <termios.h>
 
 typedef enum e_kind
 {
@@ -80,7 +81,6 @@ typedef struct s_info
 	bool			syntax_error;
 	bool			fatal_error;
 	unsigned int	last_status;
-	bool			readline_interrupted;
 	volatile sig_atomic_t signal;
 
 }	t_info;
@@ -90,6 +90,7 @@ extern t_info g_info;
 int		interpret(char *input, int *last_status);
 void	cleanup_token(t_token *token);
 void	cleanup_node(t_node *node);
+int		open_file(t_node *redirect);
 
 //tokenize
 t_token	*tokenize(char *input);

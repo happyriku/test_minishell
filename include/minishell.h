@@ -80,6 +80,7 @@ typedef struct s_info
 	bool			syntax_error;
 	bool			fatal_error;
 	unsigned int	last_status;
+	bool			readline_interrupted;
 	volatile sig_atomic_t signal;
 
 }	t_info;

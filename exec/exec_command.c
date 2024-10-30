@@ -2,39 +2,6 @@
 
 extern	char	**environ;
 
-// char	*search_path(char *input)
-// {
-// 	char	*value;
-// 	char	*path;
-// 	char	*pos;
-// 	int		path_len;
-
-// 	value = getenv("PATH");
-// 	if (!value)
-// 		return (NULL);
-// 	while (*value)
-// 	{
-// 		pos = strchr(value, ':');
-// 		if (!pos)
-// 			path_len = strlen(value);
-// 		else
-// 			path_len = strlen(value) - strlen(pos);
-// 		path = (char *)malloc(sizeof(char) * (path_len + strlen(input) + 2));
-// 		if (!path)
-// 			return (NULL);
-// 		ft_strncpy(path, value, path_len);
-// 		ft_strlcat(path, "/", PATH_MAX);
-// 		ft_strlcat(path, input, PATH_MAX);
-// 		if (access(path, X_OK) == 0)
-// 			return (path);
-// 		free(path);
-// 		if (!pos)
-// 			return (NULL);
-// 		value = pos + 1;
-// 	}
-// 	return (NULL);
-// }
-
 void	prepare_child_pipe(t_node *node, int in_fd)
 {
 	close(node->pfd[0]);
@@ -91,11 +58,17 @@ void	prepare_parent_pipe(t_node *node, int in_fd)
 
 int	wait_pid(void)
 {
-	int	wstatus;
-	int	status;
+	int		wstatus;
+	int		status;
+	pid_t	res;
 
-	if (wait(&wstatus) == -1)
-		fatal_error("wait");
+	res = wait(&wstatus);
+	printf("res : %d\n", res);
+	if (res < 0)
+	{
+		if (errno != EINTR && errno != ECHILD)
+			fatal_error("wait");
+	}
 	status = WEXITSTATUS(wstatus);
 	return (status);
 }

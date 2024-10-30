@@ -4,6 +4,7 @@ int	check_state(void)
 {
 	if (g_info.signal == SIGINT)
 	{
+		g_info.readline_interrupted = true;
 		rl_replace_line("", 0); //readlineの入力バッファを空にしてプロンプトを再表示
 		g_info.signal = 0;
 	}
@@ -26,6 +27,7 @@ void	setup_signal(void)
 
 	rl_done = 0;
 	rl_event_hook = check_state;
+	g_info.readline_interrupted = false;
 	handle_sigint(SIGINT);
 	handler_sigquit(SIGQUIT);
 }

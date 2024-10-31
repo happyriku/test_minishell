@@ -35,7 +35,7 @@ void	reset_redirect(t_node *redirect)
 
 bool	is_builtin(t_token *token)
 {
-	
+
 	if (strcmp(token->word, "echo") == 0)
 		return (true);
 	else if (strcmp(token->word, "exit") == 0)
@@ -83,6 +83,61 @@ int	wait_pid(void)
 	else
 		status = WEXITSTATUS(wstatus);
 	return (status);
+}
+
+char	*search_path(char *input)
+{
+	char	*value;
+	char	*path;
+	char	*pos;
+	int		path_len;
+
+	value = getenv("PATH");
+	if (!value)
+		return (NULL);
+	while (*value)
+	{
+		pos = strchr(value, ':');
+		if (!pos)
+			path_len = strlen(value);
+		else
+			path_len = strlen(value) - strlen(pos);
+		path = (char *)malloc(sizeof(char) * (path_len + strlen(input) + 2));
+		if (!path)
+			return (NULL);
+		ft_strncpy(path, value, path_len);
+		ft_strlcat(path, "/", PATH_MAX);
+		ft_strlcat(path, input, PATH_MAX);
+		if (access(path, X_OK) == 0)
+			return (path);
+		free(path);
+		if (!pos)
+			return (NULL);
+		value = pos + 1;
+	}
+	return (NULL);
+}
+
+void	exec_nonbuiltin(t_node *node)
+{
+	char	*path;
+	char	**args;
+
+	if (node->redirect)
+		do_redirect(node->redirect);
+	args = create_args(node->args);
+	path = search_path(args[0]);
+	if (!path)
+	{	
+		if (!strchr(args[0], '/'))
+		{
+			printf("%s: command not found\n", args[0]);
+			exit(127);
+		}
+		path = args[0];
+	}
+	if (execve(path, args, environ) == -1)
+		exit(EXIT_SUCCESS); //free(path) deleteしました
 }
 
 int	exec_command(t_node *node, int in_fd)

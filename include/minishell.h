@@ -128,15 +128,13 @@ t_token	*tokdup(t_token *token);
 
 //exec
 int		exec(t_node *node);
-int		exec_echo(char **argv, t_node *node);
-int		exec_builtin(t_node *node);
 void	exec_nonbuiltin(t_node *node);
 void	do_redirect(t_node *redirect);
 void	do_heredoc(t_node *redirect);
 int		exec_command(t_node *node, int in_fd);
 bool	is_builtin(t_token *token);
-
 char	*search_path(char *input);
+char	**create_args(t_token *token);
 
 //signal
 void	setup_signal(void);
@@ -144,6 +142,10 @@ void	reset_signals(void);
 void	reset_signal(int signum);
 void	handler_sigquit(int signum);
 void	handle_sigint(int signum);
+
+//builtin
+int		exec_builtin(t_node *node);
+int		exec_echo(char **argv, t_node *node);
 
 //error
 void	fatal_error(char *msg);

@@ -9,7 +9,7 @@ int	check_state(void)
 		rl_done = 1; //現在の入力処理を適切に終了し，新しいプロンプトの表示が可能
 		g_info.signal = 0;
 	}
-	else if (g_info.signal = SIGQUIT)
+	else if (g_info.signal == SIGQUIT)
 	{
 		g_info.signal = 0;
 	}

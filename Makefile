@@ -15,12 +15,12 @@ SRCS = main.c \
 		parse/parse_redirect.c \
 		parse/append.c \
 		exec/exec.c \
-		exec/exec_echo.c \
 		exec/exec_redirect.c \
 		exec/exec_command.c \
-		exec/exec_builtin.c \
 		signal/signal.c \
 		signal/signal_handling.c \
+		builtin/builtin.c \
+		builtin/builtin_echo.c \
 
 OBJS = $(SRCS:.c=.o)
 

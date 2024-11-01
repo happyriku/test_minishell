@@ -55,7 +55,7 @@ int	exec_builtin(t_node *node)
 		do_redirect(node->redirect);
 	args = create_args(node->args);
 	if (strcmp(args[0], "echo") == 0)
-		status = exec_echo(args, node);
+		status = builtin_echo(args, node);
 	else if (strcmp(args[0], "exit") == 0)
 		status = exec_exit(node);
 	else if (strcmp(args[0], "pwd") == 0)

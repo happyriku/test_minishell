@@ -145,7 +145,7 @@ void	handle_sigint(int signum);
 
 //builtin
 int		exec_builtin(t_node *node);
-int		exec_echo(char **argv, t_node *node);
+int		builtin_echo(char **argv, t_node *node);
 int		builtin_pwd(t_node *node);
 
 //error

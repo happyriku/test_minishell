@@ -21,6 +21,7 @@ SRCS = main.c \
 		signal/signal_handling.c \
 		builtin/builtin.c \
 		builtin/builtin_echo.c \
+		builtin/builtin_pwd.c \
 
 OBJS = $(SRCS:.c=.o)
 

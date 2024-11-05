@@ -1,6 +1,6 @@
 #include "../include/minishell.h"
 
-int	builtin_pwd(t_node *node)
+int	builtin_pwd(void)
 {
 	char	cwd[PATH_MAX];
 

@@ -3,14 +3,13 @@
 extern char	**environ;
 t_info g_info = {};
 
-int	interpret(char *input, int *last_status)
+int	interpret(char *input, int64_t *last_status)
 {
 	int		status;
 	char	*path;
 	int		i;
 	t_token	*token;
 	t_token	*tmp;
-	t_info	info;
 	t_node	*node;
 	int		res;
 

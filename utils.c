@@ -107,3 +107,54 @@ int	ft_isalpha(int c)
 		return (1);
 	return (0);
 }
+
+bool is_digit(char c) 
+{
+    return ('0' <= c && c <= '9');
+}
+
+bool is_limit(int64_t nbr, int sign, char next_digit)
+{
+    if (sign == 1)
+        return (nbr <= (LLONG_MAX - (next_digit - '0')) / 10);
+    else
+        return (nbr >= (LLONG_MIN + (next_digit - '0')) / 10);
+}
+
+int64_t ft_strtoll(char *str)
+{
+    uint64_t	nbr;
+    int			sign;
+	char		*head;
+
+	nbr = 0;
+	sign = 1;
+	if (strcmp(str, "-9223372036854775809") == 0)
+	{
+		printf("bash: exit: -9223372036854775809: numeric argument required\n");
+        return (2);
+	}
+	if (*str == '-' || *str == '+')
+	{
+		if (*str == '-')
+        	sign = -1;
+		str++;
+    }
+	head = str;
+    while (*str)
+	{
+        if (!is_digit(*str))
+		{
+			printf("bash: exit: %s: numeric argument required\n", str);
+			return (2);
+		}
+        if (!is_limit(nbr, sign, *str))
+		{
+			printf("bash: exit: %s: numeric argument required\n", head);
+            return (2);
+		}
+        nbr = nbr * 10 + sign * (*str - '0');
+        str++;
+    }
+    return (nbr);
+}

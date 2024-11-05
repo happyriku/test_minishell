@@ -26,6 +26,8 @@
 # include <fcntl.h>
 # include <errno.h>
 # include <termios.h>
+# include <limits.h>
+# include <stdint.h>
 
 typedef enum e_kind
 {
@@ -80,14 +82,14 @@ typedef struct s_info
 {
 	bool			syntax_error;
 	bool			fatal_error;
-	unsigned int	last_status;
+	int64_t			last_status;
 	volatile sig_atomic_t signal;
 
 }	t_info;
 
 extern t_info g_info;
 
-int		interpret(char *input, int *last_status);
+int		interpret(char *input, int64_t *last_status);
 void	cleanup_token(t_token *token);
 void	cleanup_node(t_node *node);
 int		open_file(t_node *redirect);
@@ -116,6 +118,7 @@ char	*ft_strncpy(char *dst, char *src, int n);
 int		ft_lstsize(t_token *lst);
 size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
 int		ft_isalpha(int c);
+int64_t	ft_strtoll(char *str);
 
 //parse
 t_node	*parse(t_token *token);
@@ -145,8 +148,9 @@ void	handle_sigint(int signum);
 
 //builtin
 int		exec_builtin(t_node *node);
-int		builtin_echo(char **argv, t_node *node);
-int		builtin_pwd(t_node *node);
+int		builtin_echo(char **argv);
+int		builtin_pwd(void);
+int		builtin_exit(char **args);
 
 //error
 void	fatal_error(char *msg);

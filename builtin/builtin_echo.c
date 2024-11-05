@@ -9,7 +9,7 @@ bool	is_echo_option(char *option)
 	return (false);
 }
 
-int	builtin_echo(char **argv, t_node *node)
+int	builtin_echo(char **argv)
 {
 	int	i;
 

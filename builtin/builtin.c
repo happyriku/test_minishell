@@ -1,12 +1,5 @@
 #include "../include/minishell.h"
 
-int	exec_exit(t_node *node)
-{
-	printf("exit\n");
-	g_info.last_status = 0;
-	exit(g_info.last_status);
-}
-
 int	get_size(t_token *args)
 {
 	t_token	*tmp;
@@ -50,16 +43,15 @@ int	exec_builtin(t_node *node)
 {
 	char	**args;
 	int		status;
-
 	if (node->redirect)
 		do_redirect(node->redirect);
 	args = create_args(node->args);
 	if (strcmp(args[0], "echo") == 0)
-		status = builtin_echo(args, node);
+		status = builtin_echo(args);
 	else if (strcmp(args[0], "exit") == 0)
-		status = exec_exit(node);
+		status = builtin_exit(args);
 	else if (strcmp(args[0], "pwd") == 0)
-		status = builtin_pwd(node);
+		status = builtin_pwd();
 	if (node->redirect)
 		reset_redirect(node->redirect);
 	return (status);

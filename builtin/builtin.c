@@ -54,6 +54,8 @@ int	exec_builtin(t_node *node)
 		status = builtin_pwd();
 	else if (strcmp(args[0], "env") == 0)
 		status = builtin_env();
+	else if (strcmp(args[0], "export") == 0)
+		status = builtin_export(args);
 	if (node->redirect)
 		reset_redirect(node->redirect);
 	return (status);

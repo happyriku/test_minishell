@@ -119,6 +119,7 @@ int		ft_lstsize(t_token *lst);
 size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
 int		ft_isalpha(int c);
 int64_t	ft_strtoll(char *str);
+int		count_args(char **args);
 
 //parse
 t_node	*parse(t_token *token);
@@ -152,6 +153,7 @@ int		builtin_echo(char **argv);
 int		builtin_pwd(void);
 int		builtin_exit(char **args);
 int		builtin_env(void);
+int		builtin_export(char	**args);
 
 //error
 void	fatal_error(char *msg);

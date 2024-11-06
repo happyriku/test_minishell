@@ -1,7 +1,5 @@
 #include "../include/minishell.h"
 
-extern char **environ;
-
 int	exec(t_node *node)
 {
     int status;

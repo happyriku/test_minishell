@@ -6,5 +6,6 @@ int	builtin_pwd(void)
 
 	if (getcwd(cwd, sizeof(cwd)) == NULL)
 		fatal_error("getcwd");
-	printf("%s\n", cwd);		
+	printf("%s\n", cwd);
+	return (0);	
 }

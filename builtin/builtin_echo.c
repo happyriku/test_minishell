@@ -1,6 +1,6 @@
 #include "../include/minishell.h"
 
-bool	is_echo_option(char *option)
+bool	is_option(char *option)
 {
 	if (!option)
 		return (false);
@@ -13,7 +13,7 @@ int	builtin_echo(char **argv)
 {
 	int	i;
 
-	if (is_echo_option(argv[1]))
+	if (is_option(argv[1]))
 	{
 		i = 1;
 		while (argv[++i])

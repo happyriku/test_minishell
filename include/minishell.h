@@ -151,6 +151,7 @@ int		exec_builtin(t_node *node);
 int		builtin_echo(char **argv);
 int		builtin_pwd(void);
 int		builtin_exit(char **args);
+int		builtin_env(void);
 
 //error
 void	fatal_error(char *msg);

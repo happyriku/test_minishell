@@ -23,6 +23,7 @@ SRCS = main.c \
 		builtin/builtin_echo.c \
 		builtin/builtin_pwd.c \
 		builtin/builtin_exit.c \
+		builtin/builtin_env.c \
 
 OBJS = $(SRCS:.c=.o)
 

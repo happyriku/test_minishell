@@ -1,5 +1,7 @@
 #include "../include/minishell.h"
 
+extern char	**environ;
+
 void	create_enviroment_variable(char	*str)
 {
 	char	*key;
@@ -16,6 +18,18 @@ void	create_enviroment_variable(char	*str)
 		fatal_error("setenv error");
 }
 
+void	print_export_variable(void)
+{
+	char	**env;
+
+	env = environ;
+	while (*env)
+	{
+		printf("declare -x %s\n", *env);
+		env++;
+	}
+}
+
 int	builtin_export(char	**args)
 {
 	int	argc;
@@ -29,7 +43,9 @@ int	builtin_export(char	**args)
 			printf("-bash: export: %s: not a valid identifier\n", args[i]);
 		exit(1);
 	}
-	if (args[0] && args[1])
+	if (args[0] && !args[1])
+		print_export_variable();
+	else if (args[0] && args[1])
 		create_enviroment_variable(args[1]);
 	else
 		printf("do");

@@ -5,8 +5,8 @@ void	create_enviroment_variable(char	*str)
 	char	*key;
 	char	*value;
 
-	key = strtok(str, "=");
-	value = strtok(NULL, "=");
+	key = ft_strtok(str, "=");
+	value = ft_strtok(NULL, "=");
 	if (!key || !value)
 	{
 		printf("Invalid syntax. Use: export VAR=value\n");

@@ -158,3 +158,27 @@ int64_t ft_strtoll(char *str)
     }
     return (nbr);
 }
+
+char	*ft_strtok(char *str, const char *delim)
+{
+	char		*start;
+	char		*end;
+	char		*res;
+	static char *save;
+
+	if (!str && !save)
+		return (NULL);
+	if (str != NULL)
+		save = str;
+	start = save;
+	while (*start && strchr(delim, *start) != NULL)
+		start++;
+	if (*start == '\0')
+		return (NULL);
+	end = start;
+	while (*end && strchr(delim, *end) == NULL)
+		end++;
+	*end = '\0';
+	save = end + 1;
+	return (start);
+}

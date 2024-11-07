@@ -120,6 +120,7 @@ size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
 int		ft_isalpha(int c);
 int64_t	ft_strtoll(char *str);
 int		count_args(char **args);
+char	*ft_strtok(char *str, const char *delim);
 
 //parse
 t_node	*parse(t_token *token);

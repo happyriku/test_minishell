@@ -25,6 +25,7 @@ SRCS = main.c \
 		builtin/builtin_exit.c \
 		builtin/builtin_env.c \
 		builtin/builtin_export.c \
+		builtin/builtin_unset.c \
 
 OBJS = $(SRCS:.c=.o)
 

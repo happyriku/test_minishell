@@ -58,6 +58,8 @@ int	exec_builtin(t_node *node)
 		status = builtin_export(args);
 	else if (strcmp(args[0], "unset") == 0)
 		status = builtin_unset(args);
+	else if (strcmp(args[0], "cd") == 0)
+		status = builtin_cd(args);
 	if (node->redirect)
 		reset_redirect(node->redirect);
 	return (status);

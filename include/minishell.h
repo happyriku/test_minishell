@@ -156,6 +156,7 @@ int		builtin_exit(char **args);
 int		builtin_env(void);
 int		builtin_export(char	**args);
 int		builtin_unset(char	**args);
+int		builtin_cd(char **args);
 
 //error
 void	fatal_error(char *msg);

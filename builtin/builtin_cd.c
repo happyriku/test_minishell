@@ -40,6 +40,49 @@ void	change_parent_directory_from_current_directory(void)
 		fatal_error("chdir");
 }
 
+void	change_root_directory(void)
+{
+	if (chdir("/") != 0)
+		fatal_error("chdir");
+}
+
+int	exec_change_directory(char *path)
+{
+	char	*new_path;
+
+	if (strncmp(path, "~", 1) == 0)
+	{
+		if (strcmp(path, "~/") == 0)
+			return (change_root_directory(), 0);
+		new_path = getenv("HOME");
+		if (!path)
+			fatal_error("getenv");
+		if (chdir(new_path) != 0)
+			return (1);
+		path += 2;
+		if (chdir(path) != 0)
+			return (1);
+	}
+	else
+	{
+		if (chdir(path) != 0)
+			return (1);
+	}
+	return (0);
+}
+
+int	cd_error(char *str)
+{
+	if (strncmp(str, "~/", 2) == 0)
+	{
+		str += 2;
+		printf("-bash: cd: /home/rishibas/%s: No such file or directory\n", str);
+	}
+	else
+		printf("-bash: cd: %s: No such file or directory\n", str);
+	return (0);
+}
+
 int	builtin_cd(char **args)
 {
 	char	*path;
@@ -52,7 +95,7 @@ int	builtin_cd(char **args)
 		if (!path)
 			fatal_error("getenv");
 		if (chdir(path) != 0)
-			fatal_error("chdir");
+			return (cd_error(path));
 	}
 	else
 	{
@@ -62,11 +105,17 @@ int	builtin_cd(char **args)
 			if (!path)
 				fatal_error("getcwd");
 			if (chdir(path) != 0)
-				fatal_error("chdir");
+				return (cd_error(path));
 		}
 		else if (strcmp(args[1], "..") == 0)
 			change_parent_directory_from_current_directory();
-
+		else if (strcmp(args[1], "/") == 0)
+			change_root_directory();
+		else
+		{
+			if (exec_change_directory(args[1]) != 0)
+				return (cd_error(args[1]));
+		}
 	}
 	return (0);
 }
